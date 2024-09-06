@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Projectiles
+  - Enemy
+  - BlueEnemy
+  - PurpleEnemy
+  - RedEnemy
+  - GreenEnemy
+  - YellowEnemy
+  - Exp
+  - UiWeaponSelector
+  - UI
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - PlayerLayer
+  - Water
+  - UI
+  - Ground
+  - EnemyLayer
+  - Walls
+  - BlueEnemyLayer
+  - PurpleEnemyLayer
+  - RedEnemyLayer
+  - GreenEnemyLayer
+  - YellowEnemyLayer
+  - ProjectilesPlayer
+  - ProjectilesEnemy
+  - ProjectilesBlue
+  - ProjectilesGreen
+  - ProjectilesPurple
+  - ProjectilesRed
+  - ProjectilesYellow
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 1554144713
+    locked: 0
+  - name: Walls
+    uniqueID: 3062034861
+    locked: 0
+  - name: UI
+    uniqueID: 449150167
+    locked: 0
+  - name: Enemies
+    uniqueID: 3488302421
+    locked: 0
+  - name: Loot
+    uniqueID: 785595127
+    locked: 0
