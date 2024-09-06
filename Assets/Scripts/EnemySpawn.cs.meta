@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 4581a0cd6bd0e824fbf23a8d98c8998e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - Enemy_bluePrefab: {fileID: 1881084584309150268, guid: fa89f53afee4da740a59c59c7fb55b85, type: 3}
+  - player: {fileID: 8676640597314363743, guid: 7a888308e82b7fe4882bc7fdf3f5598b, type: 3}
+  - Enemy_greenPrefab: {fileID: 1881084584309150268, guid: 0a80e1675de724f4983a06a980534fa9, type: 3}
+  - Enemy_redPrefab: {fileID: 1881084584309150268, guid: 81b24658ca55973469d849f271a320ce, type: 3}
+  - Enemy_yellowPrefab: {fileID: 1881084584309150268, guid: d1e105b03e3f13a4b903bf8e2115aacc, type: 3}
+  - Enemy_purplePrefab: {fileID: 1881084584309150268, guid: 068bfbb0735dda94b8d066a0ae897e30, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
