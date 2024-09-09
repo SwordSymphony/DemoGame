@@ -10,6 +10,7 @@ public class EnemyGreen : MonoBehaviour
 	public GameObject LootPrefab;
 	public GameObject RareLootPrefab;
 	public GameObject ThrowingKnifePrefab;
+	public GameObject OnDeathEffectPrefab;
 	private SpriteRenderer spriteRenderer;
 	public static AudioManager audioManager;
 	public Rigidbody2D rb;
@@ -395,9 +396,11 @@ public class EnemyGreen : MonoBehaviour
 
 	public void Die()
 	{
+		Instantiate(OnDeathEffectPrefab, transform.position, Quaternion.identity);
 		Destroy(gameObject);
 		DropExp();
 		DropLoot();
+		GiveHealth();
 
 		List <Collider2D> results = new List<Collider2D>();
 		int num = Physics2D.OverlapCircle(transform.position, popRadius, contactFilter, results);
@@ -417,6 +420,11 @@ public class EnemyGreen : MonoBehaviour
 				}
 			}
 		}
+	}
+	
+	public void GiveHealth()
+	{
+		player.GetComponent<Player>().Heal(1);
 	}
 
 	public void DropExp()

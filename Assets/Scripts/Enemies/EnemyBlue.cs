@@ -10,6 +10,7 @@ public class EnemyBlue : MonoBehaviour
 	public GameObject LootPrefab;
 	public GameObject RareLootPrefab;
 	public GameObject BubbleShotPrefab;
+	public GameObject OnDeathEffectPrefab;
 	private SpriteRenderer spriteRenderer;
 	public static AudioManager audioManager;
 	public Rigidbody2D rb;
@@ -318,6 +319,7 @@ public class EnemyBlue : MonoBehaviour
 
 	public void Die()
 	{
+		Instantiate(OnDeathEffectPrefab, transform.position, Quaternion.identity);
 		Destroy(gameObject);
 		DropExp();
 		DropLoot();

@@ -9,6 +9,7 @@ public class EnemyRed : MonoBehaviour
 	public GameObject Exp_orbPrefab;
 	public GameObject LootPrefab;
 	public GameObject RareLootPrefab;
+	public GameObject OnDeathEffectPrefab;
 	private SpriteRenderer spriteRenderer;
 	public static AudioManager audioManager;
 	public Rigidbody2D rb;
@@ -372,6 +373,7 @@ public class EnemyRed : MonoBehaviour
 
 	public void Die()
 	{
+		Instantiate(OnDeathEffectPrefab, transform.position, Quaternion.identity);
 		Destroy(gameObject);
 		DropExp();
 		DropLoot();

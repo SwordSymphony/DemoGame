@@ -26,7 +26,7 @@ public class ColdImpact : MonoBehaviour
 		freezeDuration = 2.5f;
 
 		inflictDamage();
-		StartCoroutine(SelfDestruct());
+		// StartCoroutine(SelfDestruct());
 	}
 
 	void inflictDamage()
@@ -61,9 +61,8 @@ public class ColdImpact : MonoBehaviour
 		transform.localScale = new Vector3(impactSize, impactSize, 0);
 	}
 
-	IEnumerator SelfDestruct()
+	public void SelfDestruct()
 	{
-		yield return new WaitForSeconds(0.2f);
 		Destroy(gameObject);
 	}
 }

@@ -98,23 +98,23 @@ public class GameProgress : MonoBehaviour
 		{
 			case 1:
 				fishEyesAmount += 1;
-				LootMenu.transform.GetChild(5).gameObject.GetComponent<TextMeshProUGUI>().text = coinsAmount.ToString();
+				LootMenu.transform.GetChild(5).gameObject.GetComponent<TextMeshProUGUI>().text = fishEyesAmount.ToString();
 				break;
 			case 2:
 				mushroomsAmount += 1;
-				LootMenu.transform.GetChild(6).gameObject.GetComponent<TextMeshProUGUI>().text = coinsAmount.ToString();
+				LootMenu.transform.GetChild(6).gameObject.GetComponent<TextMeshProUGUI>().text = mushroomsAmount.ToString();
 				break;
 			case 3:
 				wingsAmount += 1;
-				LootMenu.transform.GetChild(7).gameObject.GetComponent<TextMeshProUGUI>().text = coinsAmount.ToString();
+				LootMenu.transform.GetChild(7).gameObject.GetComponent<TextMeshProUGUI>().text = wingsAmount.ToString();
 				break;
 			case 4:
 				skullsAmount += 1;
-				LootMenu.transform.GetChild(8).gameObject.GetComponent<TextMeshProUGUI>().text = coinsAmount.ToString();
+				LootMenu.transform.GetChild(8).gameObject.GetComponent<TextMeshProUGUI>().text = skullsAmount.ToString();
 				break;
 			case 5:
 				hornsAmount += 1;
-				LootMenu.transform.GetChild(9).gameObject.GetComponent<TextMeshProUGUI>().text = coinsAmount.ToString();
+				LootMenu.transform.GetChild(9).gameObject.GetComponent<TextMeshProUGUI>().text = hornsAmount.ToString();
 				break;
 		}
 	}

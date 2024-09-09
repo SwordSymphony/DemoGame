@@ -9,6 +9,7 @@ public class EnemyYellow : MonoBehaviour
 	public GameObject Exp_orbPrefab;
 	public GameObject LootPrefab;
 	public GameObject RareLootPrefab;
+	public GameObject OnDeathEffectPrefab;
 	private SpriteRenderer spriteRenderer;
 	public static AudioManager audioManager;
 	public Rigidbody2D rb;
@@ -346,9 +347,11 @@ public class EnemyYellow : MonoBehaviour
 
 	public void Die()
 	{
+		Instantiate(OnDeathEffectPrefab, transform.position, Quaternion.identity);
 		Destroy(gameObject);
 		DropExp();
 		DropLoot();
+		GiveShield();
 
 		List <Collider2D> results = new List<Collider2D>();
 		int num = Physics2D.OverlapCircle(transform.position, popRadius, contactFilter, results);
@@ -386,6 +389,11 @@ public class EnemyYellow : MonoBehaviour
 			GameObject instanceRare = Instantiate(RareLootPrefab, transform.position, Quaternion.identity);
 			instanceRare.GetComponent<Loot>().type = 5;
 		}
+	}
+
+	public void GiveShield()
+	{
+		player.GetComponent<Player>().GetShield(2);
 	}
 
 	// shuts of subscription to event, so its dont causing memory leak

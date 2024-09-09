@@ -188,6 +188,7 @@ MonoBehaviour:
   LootPrefab: {fileID: 4665254131019901452, guid: bcbc96e32e6e40f45b45c6c4800bd763, type: 3}
   RareLootPrefab: {fileID: 4665254131019901452, guid: 98d0c85975a3163458916d31cf025217, type: 3}
   BubbleShotPrefab: {fileID: 7348653244791886122, guid: 38158f0abe141084f8949c41e1976430, type: 3}
+  OnDeathEffectPrefab: {fileID: 4956888577204387744, guid: 1f288977adb990c4b940eab64c85398e, type: 3}
   rb: {fileID: 2028145025042307471}
   animator: {fileID: 8464136028073321651}
   childAnimator: {fileID: 8403588122223520949}

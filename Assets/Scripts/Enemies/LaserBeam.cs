@@ -16,7 +16,6 @@ public class LaserBeam : MonoBehaviour
 
 	void OnTriggerEnter2D(Collider2D target)
 	{
-		audioManager.PlayOneShot("DarkImpact");
 		if (target.gameObject.tag == "Player")
 		{
 			target.gameObject.GetComponent<Player>().TakeDamage(projectileDamage, transform.position, 0, false);

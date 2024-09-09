@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+	public GameObject shield;
 	public GameObject CanvasUI;
 	public Rigidbody2D rb;
 	public Camera cam;
@@ -77,6 +78,10 @@ public class Player : MonoBehaviour
 	public HealthBar healthbar;
 	public int maxHealth;
 	public int currentHealth;
+	// shield
+	public int shieldAmount;
+	public float shieldTimer;
+
 
 	Vector2 movement;
 	Vector2 mousePos;
@@ -100,7 +105,8 @@ public class Player : MonoBehaviour
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		audioManager = FindObjectOfType<AudioManager>();
 		rb = GetComponent<Rigidbody2D>(); 
-		mask = LayerMask.GetMask("PlayerLayer");
+		// mask = LayerMask.GetMask("PlayerLayer");
+		mask = LayerMask.GetMask("Ignore Raycast");
 
 		maxHealth = 100;
 		currentHealth = maxHealth;
@@ -144,6 +150,8 @@ public class Player : MonoBehaviour
 		invulnerabilityDuration = 1.0f;
 
 		dashCooldown = 1.0f;
+
+		shieldTimer = 10.0f;
 	}
 
 	// Update is called once per frame
@@ -359,10 +367,64 @@ public class Player : MonoBehaviour
 		
 	}
 
+	public void Heal(int amount)
+	{
+		if (currentHealth + amount >= maxHealth)
+		{
+			currentHealth = maxHealth;
+			healthbar.SetHealth(maxHealth);
+		}
+		else
+		{
+			currentHealth += amount;
+			healthbar.SetHealth(currentHealth);
+		}
+	}
+
+	public void GetShield(int amount)
+	{
+		if (shieldAmount > 0)
+		{
+			StopCoroutine(ShieldCoroutine());
+		}
+		shieldAmount += amount;
+		StartCoroutine(ShieldCoroutine());
+		shield.SetActive(true);
+		// animator shield true
+	}
+
+	public IEnumerator ShieldCoroutine()
+	{
+		yield return new WaitForSeconds(shieldTimer);
+		shieldAmount = 0;
+		shield.SetActive(false);
+		// animator shield false
+	}
+
 	public void TakeDamage(int damage, Vector2 hitDirection, int knockbackForce, bool ignoreInvulnerability)
 	{
 		if (!invulnerable || ignoreInvulnerability)
 		{
+			if (shieldAmount > 0)
+			{
+				if (shieldAmount >= damage)
+				{
+					shieldAmount -= damage;
+					if (shieldAmount == 0)
+					{
+						// shield false
+						shield.SetActive(false);
+					}
+					return;
+				}
+				else if (shieldAmount < damage)
+				{
+					damage -= shieldAmount;
+					shieldAmount = 0;
+					// shield false
+					shield.SetActive(false);
+				}
+			}
 			currentHealth -= damage;
 			healthbar.SetHealth(currentHealth);
 

@@ -189,6 +189,7 @@ MonoBehaviour:
   LootPrefab: {fileID: 4665254131019901452, guid: d437d18ef6d2e9743b742d0896c9ba94, type: 3}
   RareLootPrefab: {fileID: 4665254131019901452, guid: 89dd79ca918c98e47a9b349943ec7952, type: 3}
   ThrowingKnifePrefab: {fileID: 7348653244791886122, guid: 62b8c3060689a0d45a3abc56eefcff31, type: 3}
+  OnDeathEffectPrefab: {fileID: 4956888577204387744, guid: 959a2abdf6718b049b5acfc70a99c87a, type: 3}
   rb: {fileID: 0}
   animator: {fileID: 2386727352441378365}
   childAnimator: {fileID: 5438658839025158978}

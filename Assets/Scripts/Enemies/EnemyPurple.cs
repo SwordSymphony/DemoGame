@@ -10,6 +10,7 @@ public class EnemyPurple : MonoBehaviour
 	public GameObject LootPrefab;
 	public GameObject RareLootPrefab;
 	public GameObject LaserBeamPrefab;
+	public GameObject OnDeathEffectPrefab;
 	private SpriteRenderer spriteRenderer;
 	public static AudioManager audioManager;
 	public Rigidbody2D rb;
@@ -329,6 +330,7 @@ public class EnemyPurple : MonoBehaviour
 
 	public void Die()
 	{
+		Instantiate(OnDeathEffectPrefab, transform.position, Quaternion.identity);
 		Destroy(gameObject);
 		DropExp();
 		DropLoot();

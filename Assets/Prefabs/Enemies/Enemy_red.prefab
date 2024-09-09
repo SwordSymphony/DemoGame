@@ -341,6 +341,7 @@ MonoBehaviour:
   Exp_orbPrefab: {fileID: 4665254131019901452, guid: b2d18e32ad704b546a360ac6a68e4c40, type: 3}
   LootPrefab: {fileID: 4665254131019901452, guid: 331d31ad4b11f5549967ed370a1744ef, type: 3}
   RareLootPrefab: {fileID: 4665254131019901452, guid: 3f430628cd8d86d4c8204b0f9f1b62b1, type: 3}
+  OnDeathEffectPrefab: {fileID: 4956888577204387744, guid: 5b76e5c36b44c194ab56bd71eb3e2c34, type: 3}
   rb: {fileID: 0}
   animator: {fileID: 5534256191721971561}
   childAnimator: {fileID: 1769978016847890919}
@@ -491,7 +492,7 @@ Transform:
   m_GameObject: {fileID: 5420824890652526450}
   serializedVersion: 2
   m_LocalRotation: {x: -0.49950832, y: 0.5004912, z: -0.5004912, w: 0.49950844}
-  m_LocalPosition: {x: 0.49, y: 0.36, z: -2.6520832}
+  m_LocalPosition: {x: 0.1, y: 0.21, z: -2.6520832}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -633,7 +634,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 12
+      scalar: 7
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -5303,7 +5304,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9009671137296253938}
-  - component: {fileID: 3361248598680621985}
+  - component: {fileID: 5572548513512701566}
   m_Layer: 0
   m_Name: ShootPoint
   m_TagString: Untagged
@@ -5327,8 +5328,8 @@ Transform:
   - {fileID: 6269674093871525855}
   m_Father: {fileID: 8459352159843215267}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!60 &3361248598680621985
-PolygonCollider2D:
+--- !u!70 &5572548513512701566
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -5359,25 +5360,6 @@ PolygonCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 9.292358, y: 2.0336792}
-      - {x: 7.166712, y: 1.718164}
-      - {x: 4.0334597, y: 1.2490509}
-      - {x: 2.183698, y: 0.8854314}
-      - {x: 0.1521112, y: 0.51177573}
-      - {x: 0.14196336, y: -0.2143637}
-      - {x: 2.4230535, y: -0.4323909}
-      - {x: 6.995793, y: -0.7813193}
-      - {x: 9.326082, y: -0.96939164}
-  m_UseDelaunayMesh: 0
+  m_Offset: {x: 3.0938997, y: 0.020290246}
+  m_Size: {x: 5.9175067, y: 1.5542732}
+  m_Direction: 1
