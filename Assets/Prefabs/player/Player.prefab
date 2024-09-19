@@ -1750,11 +1750,11 @@ MonoBehaviour:
   darkImpactSize: 1
   fireImpactSize: 1
   lightningImpactSize: 1
-  cooldownCold: 0.08
-  cooldownToxic: 0.45
-  cooldownDark: 0.45
-  cooldownFire: 0.45
-  cooldownLightning: 0.45
+  attackSpeedCold: 1
+  attackSpeedToxic: 1
+  attackSpeedDark: 1
+  attackSpeedFire: 1
+  attackSpeedLightning: 1
   projectiles: 0100000001000000010000000100000001000000
   dashCooldown: 0
   ColdImpactPrefab: {fileID: 6594934058986649174, guid: a9ebfd3d6faabc24bbe080b29e0d3617, type: 3}
@@ -1817,7 +1817,7 @@ MonoBehaviour:
   - {x: 6.0445075, y: -6.8937244, z: 0}
   m_ShapePathHash: 1159393270
   m_Mesh: {fileID: 0}
-  m_InstanceId: 97478
+  m_InstanceId: 182664
   m_LocalBounds:
     m_Center: {x: -0.18412971, y: 0.74767303, z: 0}
     m_Extent: {x: 6.8670654, y: 7.9292803, z: 0}

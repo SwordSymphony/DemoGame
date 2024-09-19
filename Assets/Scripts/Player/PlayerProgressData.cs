@@ -24,12 +24,12 @@ public class PlayerProgressData
 	public float darkImpactSize;
 	public float fireImpactSize;
 	public float lightningImpactSize;
-
-	public float cooldownCold;
-	public float cooldownToxic;
-	public float cooldownDark;
-	public float cooldownFire;
-	public float cooldownLightning;
+	// attack speed multiplier
+	public float attackSpeedCold;
+	public float attackSpeedToxic;
+	public float attackSpeedDark;
+	public float attackSpeedFire;
+	public float attackSpeedLightning;
 
 	public List<int> projectiles;
 
@@ -58,12 +58,12 @@ public class PlayerProgressData
 			fireImpactSize = player.fireImpactSize;
 			lightningImpactSize = player.lightningImpactSize;
 
-			// cooldown
-			cooldownCold = player.cooldownCold;
-			cooldownToxic = player.cooldownToxic;
-			cooldownDark = player.cooldownDark;
-			cooldownFire = player.cooldownFire;
-			cooldownLightning = player.cooldownLightning;
+			// attack speed multiplier
+			attackSpeedCold = player.attackSpeedCold;
+			attackSpeedToxic = player.attackSpeedToxic;
+			attackSpeedDark = player.attackSpeedDark;
+			attackSpeedFire = player.attackSpeedFire;
+			attackSpeedLightning = player.attackSpeedLightning;
 
 			projectiles = player.projectiles;
 		}

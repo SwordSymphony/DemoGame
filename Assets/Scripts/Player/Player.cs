@@ -53,16 +53,18 @@ public class Player : MonoBehaviour
 	public float darkImpactSize;
 	public float fireImpactSize;
 	public float lightningImpactSize;
-	// pause between attacks.
-	public float cooldownCold;
-	public float cooldownToxic;
-	public float cooldownDark;
-	public float cooldownFire;
-	public float cooldownLightning;
+	// attack speed multiplier
+	public float attackSpeedCold;
+	public float attackSpeedToxic;
+	public float attackSpeedDark;
+	public float attackSpeedFire;
+	public float attackSpeedLightning;
 
 	float invulnerabilityDuration;
 
-	float attackCooldown;
+	// float attackCooldown;
+	float attackSpeed;
+
 	float lastAttackTime;
 	int projectilesAmount;
 	public List<int> projectiles = new List<int>(){1,1,1,1,1};
@@ -131,7 +133,8 @@ public class Player : MonoBehaviour
 		weaponType = WeaponBluePrefab;
 		selectWeapon(0);
 		projectilesAmount = projectiles[0];
-		attackCooldown = cooldownCold;
+		// attackCooldown = cooldownCold;
+		attackSpeed = attackSpeedCold;
 		animator.SetInteger("weaponType", 0);
 
 		// load player data
@@ -166,11 +169,11 @@ public class Player : MonoBehaviour
 			lightningImpactSize = data.lightningImpactSize;
 
 			// cooldown
-			cooldownCold = data.cooldownCold;
-			cooldownToxic = data.cooldownToxic;
-			cooldownDark = data.cooldownDark;
-			cooldownFire = data.cooldownFire;
-			cooldownLightning = data.cooldownLightning;
+			attackSpeedCold = data.attackSpeedCold;
+			attackSpeedToxic = data.attackSpeedToxic;
+			attackSpeedDark = data.attackSpeedDark;
+			attackSpeedFire = data.attackSpeedFire;
+			attackSpeedLightning = data.attackSpeedLightning;
 
 			projectiles = data.projectiles;
 		}
@@ -211,48 +214,48 @@ public class Player : MonoBehaviour
 		if (Input.GetButton("Fire1") && !isFrozen)
 		{
 			animator.SetBool("Attack", true);
-			if (Time.time > lastAttackTime + attackCooldown)   // if no cooldown
+			animator.SetFloat("AttackSpeed", attackSpeed);
+
+			if (weaponType == WeaponBluePrefab)
 			{
-				if (weaponType == WeaponBluePrefab)
+				if (!frostSoundIsPlaying)
 				{
-					if (!frostSoundIsPlaying)
-					{
-						audioManager.Play("ColdCast", true);
-						frostSoundIsPlaying = true;
-					}
-					StartCoroutine(ShootRay());
+					audioManager.Play("ColdCast", true);
+					frostSoundIsPlaying = true;
 				}
-				else
-				{
-					switch (projectilesAmount)
-					{
-						case 1:
-							ShootOneProjectile();
-							break;
-						case 2:
-							ShootTwoProjectiles(true);
-							break;
-						case 3:
-							ShootOneProjectile();
-							Shoot3And4Projectiles();
-							break;
-						case 4:
-							ShootFourProjectiles();
-							break;
-						case 5:
-							ShootFiveProjectiles();
-							break;
-					}
-				}
-				lastAttackTime = Time.time;                    // get time of last attack
+				StartCoroutine(ShootRay());
 			}
 		}
 		else if (Input.GetButtonUp("Fire1"))
 		{
 			animator.SetBool("Attack", false);
+			animator.SetFloat("AttackSpeed", 1.0f);
 			audioManager.Stop("ColdCast");
 			frostSoundIsPlaying = false;
 		}
+	}
+
+	void Shoot()
+	{
+		switch (projectilesAmount)
+			{
+				case 1:
+					ShootOneProjectile();
+					break;
+				case 2:
+					ShootTwoProjectiles(true);
+					break;
+				case 3:
+					ShootOneProjectile();
+					Shoot3And4Projectiles();
+					break;
+				case 4:
+					ShootFourProjectiles();
+					break;
+				case 5:
+					ShootFiveProjectiles();
+					break;
+			}
 	}
 
 	void FixedUpdate()
@@ -318,7 +321,7 @@ public class Player : MonoBehaviour
 				// WeaponsBarPrefab.gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().enabled = false; // it works too!
 				selectWeapon(0);
 				projectilesAmount = projectiles[0];
-				attackCooldown = cooldownCold;
+				attackSpeed = attackSpeedCold;
 				animator.SetInteger("weaponType", 0);
 			}
 		}
@@ -328,7 +331,7 @@ public class Player : MonoBehaviour
 			{
 				weaponType = WeaponGreenPrefab;
 				projectilesAmount = projectiles[1];
-				attackCooldown = cooldownToxic;
+				attackSpeed = attackSpeedToxic;
 				selectWeapon(1);
 				animator.SetInteger("weaponType", 1);
 			}
@@ -339,7 +342,7 @@ public class Player : MonoBehaviour
 			{
 				weaponType = WeaponPurplePrefab;
 				projectilesAmount = projectiles[2];
-				attackCooldown = cooldownDark;
+				attackSpeed = attackSpeedDark;
 				selectWeapon(2);
 				animator.SetInteger("weaponType", 2);
 			}
@@ -350,7 +353,7 @@ public class Player : MonoBehaviour
 			{
 				weaponType = WeaponRedPrefab;
 				projectilesAmount = projectiles[3];
-				attackCooldown = cooldownFire;
+				attackSpeed = attackSpeedFire;
 				selectWeapon(3);
 				animator.SetInteger("weaponType", 3);
 			}
@@ -361,7 +364,7 @@ public class Player : MonoBehaviour
 			{
 				weaponType = WeaponYellowPrefab;
 				projectilesAmount = projectiles[4];
-				attackCooldown = cooldownLightning;
+				attackSpeed = attackSpeedLightning;
 				selectWeapon(4);
 				animator.SetInteger("weaponType", 4);
 			}

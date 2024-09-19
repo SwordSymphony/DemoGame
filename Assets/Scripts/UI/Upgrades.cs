@@ -156,15 +156,6 @@ public class Upgrades : MonoBehaviour
 					}
 					break;
 
-				// case "Attack speed":
-				// 	_player.cooldownCold -= 0.03f;
-				// 	_upgrade.Level += 1;
-				// 	if (_upgrade.Level == maxLevelAttack)
-				// 	{
-				// 		UpgradesList.Remove(_upgrade);
-				// 	}
-				// 	break;
-
 				case "Attack damage":
 					_player.damageCold += 2;
 					_upgrade.Level += 1;
@@ -202,7 +193,7 @@ public class Upgrades : MonoBehaviour
 					break;
 
 				case "Attack speed":
-					_player.cooldownToxic -= 0.11f;
+					_player.attackSpeedToxic += 0.5f;
 					_upgrade.Level += 1;
 					if (_upgrade.Level == maxLevelAttack)
 					{
@@ -247,7 +238,7 @@ public class Upgrades : MonoBehaviour
 					break;
 
 				case "Attack speed":
-					_player.cooldownDark -= 0.11f;
+					_player.attackSpeedDark += 0.5f;
 					_upgrade.Level += 1;
 					if (_upgrade.Level == maxLevelAttack)
 					{
@@ -292,7 +283,7 @@ public class Upgrades : MonoBehaviour
 					break;
 
 				case "Attack speed":
-					_player.cooldownFire -= 0.11f;
+					_player.attackSpeedFire += 0.5f;
 					_upgrade.Level += 1;
 					if (_upgrade.Level == maxLevelAttack)
 					{
@@ -337,7 +328,7 @@ public class Upgrades : MonoBehaviour
 					break;
 
 				case "Attack speed":
-					_player.cooldownLightning -= 0.11f;
+					_player.attackSpeedLightning += 0.5f;
 					_upgrade.Level += 1;
 					if (_upgrade.Level == maxLevelAttack)
 					{
