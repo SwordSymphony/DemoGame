@@ -67,9 +67,6 @@ public class DarkExplosion : MonoBehaviour
 			case "YellowEnemy":
 				target.gameObject.GetComponent<EnemyYellow>().Fear(fearDuration);
 				break;
-			// case "Player":
-			// 	target.gameObject.GetComponent<Player>().Fear(fearDuration);
-			// 	break;
 		}
 	}
 	IEnumerator SelfDestruct()

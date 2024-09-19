@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Exp : MonoBehaviour
 {
-	GameProgress gameProgress;
+	LootProgress lootProgress;
 	GameObject player;
 	public float speed;
 
 	void Start()
 	{
 		player = GameObject.FindWithTag("Player");
-		gameProgress = GameObject.FindWithTag("UI").GetComponent<GameProgress>();
+		lootProgress = GameObject.FindWithTag("UI").GetComponent<LootProgress>();
 	}
 
 	void FixedUpdate()
@@ -19,7 +19,7 @@ public class Exp : MonoBehaviour
 		transform.position = Vector2.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
 		if (transform.position == player.transform.position)
 		{
-			gameProgress.AddExp();
+			lootProgress.AddExp();
 			Destroy(gameObject);
 		}
 	}

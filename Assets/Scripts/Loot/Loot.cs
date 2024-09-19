@@ -5,7 +5,7 @@ using UnityEngine;
 public class Loot : MonoBehaviour
 {
 	GameObject player;
-	GameProgress gameProgress;
+	LootProgress lootProgress;
 
 	public float speed;
 	public bool rare;
@@ -14,7 +14,7 @@ public class Loot : MonoBehaviour
 	void Start()
 	{
 		player = GameObject.FindWithTag("Player");
-		gameProgress = GameObject.FindWithTag("UI").GetComponent<GameProgress>();
+		lootProgress = GameObject.FindWithTag("UI").GetComponent<LootProgress>();
 	}
 
 	void FixedUpdate()
@@ -22,7 +22,7 @@ public class Loot : MonoBehaviour
 		transform.position = Vector2.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
 		if (transform.position == player.transform.position)
 		{
-			gameProgress.AddLoot(rare, type);
+			lootProgress.AddLoot(rare, type);
 			Destroy(gameObject);
 		}
 	}

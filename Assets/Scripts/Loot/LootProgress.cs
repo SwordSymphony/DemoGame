@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class GameProgress : MonoBehaviour
+public class LootProgress : MonoBehaviour
 {
 	public static AudioManager audioManager;
 	public GameObject sapphiresPrefab;
@@ -24,17 +24,17 @@ public class GameProgress : MonoBehaviour
 	public GameObject DeathMenu;
 	public GameObject LootMenu;
 
-	int sapphiresAmount;
-	int emeraldsAmount;
-	int amethystsAmount;
-	int rubiesAmount;
-	int coinsAmount;
+	public int sapphiresAmount;
+	public int emeraldsAmount;
+	public int amethystsAmount;
+	public int rubiesAmount;
+	public int coinsAmount;
 
-	int fishEyesAmount;
-	int mushroomsAmount;
-	int wingsAmount;
-	int skullsAmount;
-	int hornsAmount;
+	public int fishEyesAmount;
+	public int mushroomsAmount;
+	public int wingsAmount;
+	public int skullsAmount;
+	public int hornsAmount;
 
 	public int playerLevel;
 	public int currentExp;
@@ -49,6 +49,68 @@ public class GameProgress : MonoBehaviour
 		playerLevel = 1;
 		expToNextLevel = 5;
 		expProgression = 5;
+
+		// load progress
+		LoadProgress();
+	}
+
+	void LoadProgress()
+	{
+		LootProgressData data = SaveSystem.LoadLootProgress();
+
+		if (data is not null)
+		{
+			sapphiresAmount = data.sapphiresAmount;
+			emeraldsAmount = data.emeraldsAmount;
+			amethystsAmount = data.amethystsAmount;
+			rubiesAmount = data.rubiesAmount;
+			coinsAmount = data.coinsAmount;
+
+			LootMenu.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = sapphiresAmount.ToString();
+			LootMenu.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = emeraldsAmount.ToString();
+			LootMenu.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = amethystsAmount.ToString();
+			LootMenu.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>().text = rubiesAmount.ToString();
+			LootMenu.transform.GetChild(4).gameObject.GetComponent<TextMeshProUGUI>().text = coinsAmount.ToString();
+
+			fishEyesAmount = data.fishEyesAmount;
+			mushroomsAmount = data.mushroomsAmount;
+			wingsAmount = data.wingsAmount;
+			skullsAmount = data.skullsAmount;
+			hornsAmount = data.hornsAmount;
+
+			LootMenu.transform.GetChild(5).gameObject.GetComponent<TextMeshProUGUI>().text = fishEyesAmount.ToString();
+			LootMenu.transform.GetChild(6).gameObject.GetComponent<TextMeshProUGUI>().text = mushroomsAmount.ToString();
+			LootMenu.transform.GetChild(7).gameObject.GetComponent<TextMeshProUGUI>().text = wingsAmount.ToString();
+			LootMenu.transform.GetChild(8).gameObject.GetComponent<TextMeshProUGUI>().text = skullsAmount.ToString();
+			LootMenu.transform.GetChild(9).gameObject.GetComponent<TextMeshProUGUI>().text = hornsAmount.ToString();
+		}
+	}
+
+	public void SpendGems(int gem, int price)
+	{
+		switch (gem)
+			{
+				case 0:
+					sapphiresAmount -= price;
+					LootMenu.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = sapphiresAmount.ToString();
+					break;
+				case 1:
+					emeraldsAmount -= price;
+					LootMenu.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = emeraldsAmount.ToString();
+					break;
+				case 2:
+					amethystsAmount -= price;
+					LootMenu.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = amethystsAmount.ToString();
+					break;
+				case 3:
+					rubiesAmount -= price;
+					LootMenu.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>().text = rubiesAmount.ToString();
+					break;
+				case 4:
+					coinsAmount -= price;
+					LootMenu.transform.GetChild(4).gameObject.GetComponent<TextMeshProUGUI>().text = coinsAmount.ToString();
+					break;
+			}
 	}
 
 	public void PlayerDeath()
@@ -63,6 +125,9 @@ public class GameProgress : MonoBehaviour
 
 		DeathMenu.transform.GetChild(8).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = playerLevel.ToString();
 		DeathMenu.SetActive(true);
+
+		// save progress
+		SaveSystem.SaveLootProgress(this);
 	}
 
 	public void AddExp()
@@ -75,8 +140,8 @@ public class GameProgress : MonoBehaviour
 			Time.timeScale = 0f;
 			LevelUpMenu.SetActive(true);
 			currentExp = 0;
-			expToNextLevel += 20 + expProgression;
 			expProgression += 5;
+			expToNextLevel += expProgression;// 5 15 30 50 75 105 140 180 225 275 330 390 455 525 600 680 765 855
 		}
 	}
 

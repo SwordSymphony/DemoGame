@@ -27,6 +27,7 @@ public class BubbleShot : MonoBehaviour
 		// audioManager.PlayOneShot("DarkImpact");
 		if (target.gameObject.tag == "Player")
 		{
+			target.gameObject.GetComponent<Player>().Freeze();
 			target.gameObject.GetComponent<Player>().TakeDamage(projectileDamage, transform.position, 20, false);
 		}
 		Destroy(gameObject);

@@ -14,8 +14,13 @@ public class EnemyPurple : MonoBehaviour
 	private SpriteRenderer spriteRenderer;
 	public static AudioManager audioManager;
 	public Rigidbody2D rb;
+
 	public Animator animator;
-	public Animator childAnimator;
+	public Animator burnAnimator;
+	public Animator freezeAnimator;
+	public Animator fearAnimator;
+	public Animator slowAnimator;
+
 	public LayerMask PlayerLayer;
 	public LayerMask PurpleEnemyLayer;
 	public GameObject HealthBarPurplePrefab;
@@ -176,13 +181,13 @@ public class EnemyPurple : MonoBehaviour
 	public IEnumerator FreezeCoroutine(float seconds)
 	{
 		isFrozen = true;
-		childAnimator.SetBool("Freeze", true);
+		freezeAnimator.SetBool("Freeze", true);
 		animator.SetBool("frozen", true);
 		rb.constraints = RigidbodyConstraints2D.FreezeAll;
 		yield return new WaitForSeconds(seconds);
 		rb.constraints = RigidbodyConstraints2D.FreezeRotation;    // get freeze rotation back
 		isFrozen = false;
-		childAnimator.SetBool("Freeze", false);
+		freezeAnimator.SetBool("Freeze", false);
 		animator.SetBool("frozen", false);
 	}
 
@@ -240,12 +245,12 @@ public class EnemyPurple : MonoBehaviour
 	{
 		audioManager.PlayOneShot("EffectBurning");
 		isBurning = true;
-		childAnimator.SetBool("Burn", true);
+		burnAnimator.SetBool("Burn", true);
 		InvokeRepeating("TakeBurnDamage", 0.0f, 0.2f);
 		yield return new WaitForSeconds(seconds);
 		CancelInvoke("TakeBurnDamage");
 		isBurning = false;
-		childAnimator.SetBool("Burn", false);
+		burnAnimator.SetBool("Burn", false);
 		// audioManager.Stop("EffectBurning");
 	}
 

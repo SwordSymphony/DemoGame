@@ -14,8 +14,13 @@ public class EnemyBlue : MonoBehaviour
 	private SpriteRenderer spriteRenderer;
 	public static AudioManager audioManager;
 	public Rigidbody2D rb;
+
 	public Animator animator;
-	public Animator childAnimator;
+	public Animator burnAnimator;
+	public Animator freezeAnimator;
+	public Animator fearAnimator;
+	public Animator slowAnimator;
+
 	public LayerMask PlayerLayer;
 	public LayerMask BlueEnemyLayer;
 	public GameObject HealthBarBluePrefab;
@@ -165,14 +170,14 @@ public class EnemyBlue : MonoBehaviour
 	public IEnumerator FreezeCoroutine(float seconds)
 	{
 		isFrozen = true;
-		childAnimator.SetBool("Freeze", true);
+		freezeAnimator.SetBool("Freeze", true);
 		animator.SetBool("isMoving", false);
 		rb.constraints = RigidbodyConstraints2D.FreezeAll;
 		yield return new WaitForSeconds(seconds);
 		rb.constraints = RigidbodyConstraints2D.FreezeRotation;    // get freeze rotation back
 		isFrozen = false;
 		animator.SetBool("isMoving", true);
-		childAnimator.SetBool("Freeze", false);
+		freezeAnimator.SetBool("Freeze", false);
 	}
 
 	// Slow
@@ -229,12 +234,12 @@ public class EnemyBlue : MonoBehaviour
 	{
 		audioManager.Play("EffectBurning", false);
 		isBurning = true;
-		childAnimator.SetBool("Burn", true);
+		burnAnimator.SetBool("Burn", true);
 		InvokeRepeating("TakeBurnDamage", 0.0f, 0.2f);
 		yield return new WaitForSeconds(seconds);
 		CancelInvoke("TakeBurnDamage");
 		isBurning = false;
-		childAnimator.SetBool("Burn", false);
+		burnAnimator.SetBool("Burn", false);
 		// audioManager.Stop("EffectBurning");
 	}
 

@@ -80,7 +80,7 @@ public class Upgrades : MonoBehaviour
 
 	void Start()
 	{
-		maxLevelProjectiles = 4;
+		maxLevelProjectiles = 3;
 		maxLevelAttack = 3;
 		GetRandomUpgradesList();
 	}

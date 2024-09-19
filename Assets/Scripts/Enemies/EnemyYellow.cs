@@ -13,8 +13,13 @@ public class EnemyYellow : MonoBehaviour
 	private SpriteRenderer spriteRenderer;
 	public static AudioManager audioManager;
 	public Rigidbody2D rb;
+
 	public Animator animator;
-	public Animator childAnimator;
+	public Animator burnAnimator;
+	public Animator freezeAnimator;
+	public Animator fearAnimator;
+	public Animator slowAnimator;
+
 	public LayerMask PlayerLayer;
 	public LayerMask YellowEnemyLayer;
 	public GameObject HealthBarYellowPrefab;
@@ -147,7 +152,7 @@ public class EnemyYellow : MonoBehaviour
 	public IEnumerator RamAttack()
 	{
 		animator.SetBool("RamAttack", true);
-		transform.GetChild(1).gameObject.SetActive(true);
+		transform.GetChild(4).gameObject.SetActive(true);
 		ramAttack = true;
 		Vector2 direction = player.transform.position - transform.position;
 		rb.AddForce(direction * ramForce, ForceMode2D.Impulse);
@@ -157,7 +162,7 @@ public class EnemyYellow : MonoBehaviour
 		rb.velocity = Vector3.zero;
 		attackCooldown = true;
 		animator.SetBool("RamAttack", false);
-		transform.GetChild(1).gameObject.SetActive(false);
+		transform.GetChild(4).gameObject.SetActive(false);
 		yield return new WaitForSeconds(attackCooldownDuration);
 
 		attackCooldown = false;
@@ -195,13 +200,13 @@ public class EnemyYellow : MonoBehaviour
 	public IEnumerator FreezeCoroutine(float seconds)
 	{
 		isFrozen = true;
-		childAnimator.SetBool("Freeze", true);
+		freezeAnimator.SetBool("Freeze", true);
 		animator.SetBool("isMoving", false);
 		rb.constraints = RigidbodyConstraints2D.FreezeAll;
 		yield return new WaitForSeconds(seconds);
 		rb.constraints = RigidbodyConstraints2D.FreezeRotation;    // get freeze rotation back
 		isFrozen = false;
-		childAnimator.SetBool("Freeze", false);
+		freezeAnimator.SetBool("Freeze", false);
 		animator.SetBool("isMoving", true);
 	}
 
@@ -259,12 +264,12 @@ public class EnemyYellow : MonoBehaviour
 	{
 		audioManager.PlayOneShot("EffectBurning");
 		isBurning = true;
-		childAnimator.SetBool("Burn", true);
+		burnAnimator.SetBool("Burn", true);
 		InvokeRepeating("TakeBurnDamage", 0.0f, 0.2f);
 		yield return new WaitForSeconds(seconds);
 		CancelInvoke("TakeBurnDamage");
 		isBurning = false;
-		childAnimator.SetBool("Burn", false);
+		burnAnimator.SetBool("Burn", false);
 		// audioManager.Stop("EffectBurning");
 	}
 

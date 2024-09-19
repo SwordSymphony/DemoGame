@@ -1,13 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class EnemySpawn : MonoBehaviour
 {
-	public GameObject SpawnZone;
-	public Tilemap tileMap;
-	public GameObject player;
 	public GameObject CanvasEnemy;
 	public GameObject Enemy_bluePrefab;
 	public GameObject Enemy_greenPrefab;
@@ -17,11 +13,8 @@ public class EnemySpawn : MonoBehaviour
 
 	GameObject enemyPrefab;
 
-	// public delegate void OnEnemyDie();
-	// public event OnEnemyDie onEnemyDie;
-
-	public int maxEnemies;
-	public int currentEnemies;
+	int maxEnemies;
+	int currentEnemies;
 	int enemyDeath;
 	float spawnDelay;
 	float spawnStartDelay;
@@ -35,20 +28,29 @@ public class EnemySpawn : MonoBehaviour
 
 	bool isSpawning;
 
+	List<Vector2> spawnPoints = new List<Vector2>()
+	{
+		new Vector2(789, 300), new Vector2(781, 195), new Vector2(779, 96), new Vector2(627, 350), new Vector2(672, 277),
+		new Vector2(651, 203), new Vector2(644, 116), new Vector2(685, 27), new Vector2(541, 296), new Vector2(553, 221),
+
+		new Vector2(512, 157), new Vector2(513, 73), new Vector2(445, 339), new Vector2(444, 257), new Vector2(443, 109),
+		new Vector2(384, 188), new Vector2(314, 294), new Vector2(327, 105), new Vector2(345, 27), new Vector2(229, 236),
+		new Vector2(256, 178), new Vector2(202, 94)
+	};
+
 	void Start()
 	{
-		maxEnemies = 500;
+		maxEnemies = 600;
 		spawnDelay = 3.0f;
 		spawnStartDelay = 2.0f;
-		spawnAmount = 2;
+		spawnAmount = 5;
 		stage = 1;
 
-		stageOneDuration = 60;   // = 300; 5 mins
-		stageTwoDuration = 60;   // = 600;
-		stageThreeDuration = 60; // = 900;
+		stageOneDuration = 120;   // = 300; 5 mins
+		stageTwoDuration = 120;   // = 600;
+		stageThreeDuration = 240; // = 900;
 
 		SpawnMobs();
-
 		StartCoroutine(ChangeStage());
 	}
 
@@ -66,11 +68,6 @@ public class EnemySpawn : MonoBehaviour
 				isSpawning = true;
 			}
 		}
-		// todo:
-		// if (currentEnemies < lowEnemiesAmount)
-		// {
-		// 	// increase spawn rate
-		// }
 	}
 
 	public IEnumerator ChangeStage()
@@ -83,7 +80,7 @@ public class EnemySpawn : MonoBehaviour
 		// stage 1
 		StopSpawn();
 		spawnDelay /= 2;
-		spawnAmount = 4;
+		spawnAmount = 5;
 		InvokeRepeating("SpawnMobs", spawnStartDelay, spawnDelay); // start new spawn
 		isSpawning = true;
 		yield return new WaitForSeconds(stageTwoDuration);
@@ -91,7 +88,7 @@ public class EnemySpawn : MonoBehaviour
 		// stage 2
 		StopSpawn();
 		spawnDelay /= 2;
-		spawnAmount = 6;
+		spawnAmount = 7;
 		stage = 2;
 		InvokeRepeating("SpawnMobs", spawnStartDelay, spawnDelay); // start new spawn
 		isSpawning = true;
@@ -100,7 +97,7 @@ public class EnemySpawn : MonoBehaviour
 		// stage 3
 		StopSpawn();
 		spawnDelay /= 2;
-		spawnAmount = 8;
+		spawnAmount = 9;
 		stage = 3;
 		InvokeRepeating("SpawnMobs", spawnStartDelay, spawnDelay); // start new spawn
 		isSpawning = true;
@@ -146,16 +143,18 @@ public class EnemySpawn : MonoBehaviour
 		switch (stage)
 		{
 			case 1:
-
+				_SpawnMobs(position);
 				_SpawnMobs(position);
 				break;
 
 			case 2:
 				_SpawnMobs(position);
 				_SpawnMobs(position);
+				_SpawnMobs(position);
 				break;
 			
 			case 3:
+				_SpawnMobs(position);
 				_SpawnMobs(position);
 				_SpawnMobs(position);
 				_SpawnMobs(position);
@@ -165,33 +164,15 @@ public class EnemySpawn : MonoBehaviour
 
 	public Vector2 GetSpawnPosition()
 	{
-		var spawnCollider = SpawnZone.GetComponent<BoxCollider2D>();
-		var spawnCollider1 = SpawnZone.GetComponent<PolygonCollider2D>();
-
-		float colliderBoundsXmin = spawnCollider.bounds.min.x;
-		float colliderBoundsXmax = spawnCollider.bounds.max.x;
-		float colliderBoundsYmin = spawnCollider.bounds.min.y;
-		float colliderBoundsYmax = spawnCollider.bounds.max.y;
-
-		int random = Random.Range(0, 2);
-		if (random != 0)
-		{
-			colliderBoundsXmin = spawnCollider1.bounds.min.x;
-			colliderBoundsXmax = spawnCollider1.bounds.max.x;
-			colliderBoundsYmin = spawnCollider1.bounds.min.y;
-			colliderBoundsYmax = spawnCollider1.bounds.max.y;
-		}
-		var xPos = Random.Range(colliderBoundsXmin, colliderBoundsXmax);
-		var yPos = Random.Range(colliderBoundsYmin, colliderBoundsYmax);
-
-		Vector2 spawnPosition = new Vector2(xPos, yPos);
+		int random = Random.Range(0, 22);
+		Vector2 spawnPosition = spawnPoints[random];
 		return spawnPosition;
 	}
 
 	void _SpawnMobs(Vector2 position)
 	{
 		GetEnemyPrefab();
-		int amount = Random.Range(2, spawnAmount);
+		int amount = Random.Range(3, spawnAmount);
 		for (int i = 0; i < amount; i++)
 		{
 			GameObject instance = Instantiate(enemyPrefab, position, transform.rotation, CanvasEnemy.transform);
@@ -230,6 +211,7 @@ public class EnemySpawn : MonoBehaviour
 	void StopSpawn()
 	{
 		CancelInvoke("SpawnMobs");
+		Debug.Log("spawn stopped");
 		isSpawning = false;
 	}
 }

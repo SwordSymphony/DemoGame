@@ -68,6 +68,9 @@ public class ColdExplosion : MonoBehaviour
 			case "YellowEnemy":
 				target.gameObject.GetComponent<EnemyYellow>().Freeze(freezeDuration);
 				break;
+			case "Player":
+				target.gameObject.GetComponent<Player>().Freeze();
+				break;
 		}
 	}
 

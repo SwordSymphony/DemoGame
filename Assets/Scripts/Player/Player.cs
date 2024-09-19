@@ -9,8 +9,13 @@ public class Player : MonoBehaviour
 	public GameObject CanvasUI;
 	public Rigidbody2D rb;
 	public Camera cam;
+
 	public Animator animator;
-	public Animator childAnimator;
+	public Animator burnAnimator;
+	public Animator freezeAnimator;
+	public Animator slowAnimator;
+	public GameObject heal;
+
 	public static AudioManager audioManager;
 	private SpriteRenderer spriteRenderer;
 	
@@ -30,35 +35,33 @@ public class Player : MonoBehaviour
 	public GameObject WeaponRedPrefab;    // weapon against red enemies
 	public GameObject WeaponYellowPrefab; // weapon against yellow enemies
 
+	// damage
 	public int damageCold;
 	public int damageToxic;
 	public int damageDark;
 	public int damageFire;
 	public int damageLightning;
-
 	// overlap circle of aoe
 	public float coldAoeSize;
 	public float toxicAoeSize;
 	public float darkAoeSize;
 	public float fireAoeSize;
 	public float lightningAoeSize;
-
 	// sprite size
-	public float fireImpactSize;
 	public float coldImpactSize;
 	public float toxicImpactSize;
 	public float darkImpactSize;
+	public float fireImpactSize;
 	public float lightningImpactSize;
-
+	// pause between attacks.
 	public float cooldownCold;
 	public float cooldownToxic;
 	public float cooldownDark;
 	public float cooldownFire;
 	public float cooldownLightning;
-	public float invulnerabilityDuration;
 
-	public float projectileCooldown;
-	public float rayCooldown;
+	float invulnerabilityDuration;
+
 	float attackCooldown;
 	float lastAttackTime;
 	int projectilesAmount;
@@ -82,7 +85,6 @@ public class Player : MonoBehaviour
 	public int shieldAmount;
 	public float shieldTimer;
 
-
 	Vector2 movement;
 	Vector2 mousePos;
 	Vector2 aim;
@@ -91,6 +93,8 @@ public class Player : MonoBehaviour
 	Vector2 aim4;
 	Vector2 aim5;
 
+	Color defaultColor;
+
 	// status
 	bool knockback;
 	bool frostSoundIsPlaying;
@@ -98,60 +102,78 @@ public class Player : MonoBehaviour
 	bool isDashOnCooldown;
 	bool invulnerable;
 	bool isBurning;
+	bool isFrozen;
 
 	void Start ()
 	{
-		CanvasUI = GameObject.FindWithTag("UI");
+		// CanvasUI = GameObject.FindWithTag("UI");
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		audioManager = FindObjectOfType<AudioManager>();
 		rb = GetComponent<Rigidbody2D>(); 
-		// mask = LayerMask.GetMask("PlayerLayer");
 		mask = LayerMask.GetMask("Ignore Raycast");
 
+		defaultColor = spriteRenderer.color;
+
+		// health
 		maxHealth = 100;
 		currentHealth = maxHealth;
 		healthbar.SetMaxHealth(maxHealth);
 
-		weaponType = WeaponBluePrefab;
-		selectWeapon(0);
-
-		projectileCooldown = 0.45f;
-		rayCooldown = 0.15f;
 		bulletForce = 35;
 		moveSpeed = 15;
 		projectilesAmount = 1;
 
-		damageCold = 3;
-		damageToxic = 25;
-		damageDark = 25;
-		damageFire = 25;
-		damageLightning = 25;
-
-		// overlap circle of aoe
-		coldAoeSize = 1.75f;
-		toxicAoeSize = 3.5f;
-		darkAoeSize = 3.5f;
-		fireAoeSize = 3.5f;
-		lightningAoeSize = 3.5f;
-
-		// sprite size
-		coldImpactSize = 0.5f;
-		toxicImpactSize = 1.0f;
-		darkImpactSize = 1.0f;
-		fireImpactSize = 1.0f;
-		lightningImpactSize = 1.0f;
-
-		// pause between attacks.
-		cooldownCold = 0.08f;
-		cooldownToxic = 0.45f;
-		cooldownDark = 0.45f;
-		cooldownFire = 0.45f;
-		cooldownLightning = 0.45f;
 		invulnerabilityDuration = 1.0f;
-
 		dashCooldown = 1.0f;
-
 		shieldTimer = 10.0f;
+
+		// current weapon
+		weaponType = WeaponBluePrefab;
+		selectWeapon(0);
+		projectilesAmount = projectiles[0];
+		attackCooldown = cooldownCold;
+		animator.SetInteger("weaponType", 0);
+
+		// load player data
+		LoadProgress();
+	}
+
+	void LoadProgress()
+	{
+		PlayerProgressData data = SaveSystem.LoadPlayerProgress();
+
+		if (data is not null && data.damageCold > 0)
+		{
+			// damage
+			damageCold = data.damageCold;
+			damageToxic = data.damageToxic;
+			damageDark = data.damageDark;
+			damageFire = data.damageFire;
+			damageLightning = data.damageLightning;
+
+			// overlap circle of aoe
+			coldAoeSize = data.coldAoeSize;
+			toxicAoeSize = data.toxicAoeSize;
+			darkAoeSize = data.darkAoeSize;
+			fireAoeSize = data.fireAoeSize;
+			lightningAoeSize = data.lightningAoeSize;
+
+			// sprite size
+			coldImpactSize = data.coldImpactSize;
+			toxicImpactSize = data.toxicImpactSize;
+			darkImpactSize = data.darkImpactSize;
+			fireImpactSize = data.fireImpactSize;
+			lightningImpactSize = data.lightningImpactSize;
+
+			// cooldown
+			cooldownCold = data.cooldownCold;
+			cooldownToxic = data.cooldownToxic;
+			cooldownDark = data.cooldownDark;
+			cooldownFire = data.cooldownFire;
+			cooldownLightning = data.cooldownLightning;
+
+			projectiles = data.projectiles;
+		}
 	}
 
 	// Update is called once per frame
@@ -173,11 +195,11 @@ public class Player : MonoBehaviour
 
 		// mouse position
 		mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-		
+
 		if (Input.GetKeyDown("space"))
 		{
 			// Dash
-			if(!isDashOnCooldown)
+			if(!isDashOnCooldown && !isFrozen)
 			{
 				if (movement.x != 0 || movement.y != 0)
 				{
@@ -185,11 +207,11 @@ public class Player : MonoBehaviour
 				}
 			}
 		}
-
-		if (Input.GetButton("Fire1"))
+		
+		if (Input.GetButton("Fire1") && !isFrozen)
 		{
 			animator.SetBool("Attack", true);
-			if (Time.time > lastAttackTime + attackCooldown)   // if now cooldown
+			if (Time.time > lastAttackTime + attackCooldown)   // if no cooldown
 			{
 				if (weaponType == WeaponBluePrefab)
 				{
@@ -199,35 +221,30 @@ public class Player : MonoBehaviour
 						frostSoundIsPlaying = true;
 					}
 					StartCoroutine(ShootRay());
-					attackCooldown = rayCooldown;           // set cooldown
-					lastAttackTime = Time.time;                    // get time of last attack
 				}
 				else
 				{
-					if (projectilesAmount == 1)
+					switch (projectilesAmount)
 					{
-						ShootOneProjectile();
+						case 1:
+							ShootOneProjectile();
+							break;
+						case 2:
+							ShootTwoProjectiles(true);
+							break;
+						case 3:
+							ShootOneProjectile();
+							Shoot3And4Projectiles();
+							break;
+						case 4:
+							ShootFourProjectiles();
+							break;
+						case 5:
+							ShootFiveProjectiles();
+							break;
 					}
-					else if (projectilesAmount == 2)
-					{
-						ShootTwoProjectiles(true);
-					}
-					else if (projectilesAmount == 3)
-					{
-						ShootOneProjectile();
-						Shoot3And4Projectiles();
-					}
-					else if (projectilesAmount == 4)
-					{
-						ShootFourProjectiles();
-					}
-					else if (projectilesAmount == 5)
-					{
-						ShootFiveProjectiles();
-					}
-					attackCooldown = projectileCooldown;           // set cooldown
-					lastAttackTime = Time.time;                    // get time of last attack
 				}
+				lastAttackTime = Time.time;                    // get time of last attack
 			}
 		}
 		else if (Input.GetButtonUp("Fire1"))
@@ -301,7 +318,7 @@ public class Player : MonoBehaviour
 				// WeaponsBarPrefab.gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().enabled = false; // it works too!
 				selectWeapon(0);
 				projectilesAmount = projectiles[0];
-				rayCooldown = cooldownCold;
+				attackCooldown = cooldownCold;
 				animator.SetInteger("weaponType", 0);
 			}
 		}
@@ -373,12 +390,21 @@ public class Player : MonoBehaviour
 		{
 			currentHealth = maxHealth;
 			healthbar.SetHealth(maxHealth);
+			StartCoroutine(HealCoroutine());
 		}
 		else
 		{
 			currentHealth += amount;
 			healthbar.SetHealth(currentHealth);
+			StartCoroutine(HealCoroutine());
 		}
+	}
+	
+	public IEnumerator HealCoroutine()
+	{
+		heal.SetActive(true);
+		yield return new WaitForSeconds(0.3f);
+		heal.SetActive(false);
 	}
 
 	public void GetShield(int amount)
@@ -438,12 +464,16 @@ public class Player : MonoBehaviour
 			{
 				Time.timeScale = 0f;
 				audioManager.Stop("SagaOfTheSeaWolves");
-				CanvasUI.GetComponent<GameProgress>().PlayerDeath();
+				CanvasUI.GetComponent<LootProgress>().PlayerDeath();
 				CanvasUI.GetComponent<PauseMenu>().gameOver = true;
 				// todo: game over sound?
+				// save player data
 			}
 			StartCoroutine(invulnerabilityCoroutine());
-			StartCoroutine(BlinkCoroutine());
+			if (!isFrozen)
+			{
+				StartCoroutine(BlinkCoroutine());
+			}
 		}
 	}
 
@@ -456,7 +486,7 @@ public class Player : MonoBehaviour
 		{
 			Time.timeScale = 0f;
 			audioManager.Stop("SagaOfTheSeaWolves");
-			CanvasUI.GetComponent<GameProgress>().PlayerDeath();
+			CanvasUI.GetComponent<LootProgress>().PlayerDeath();
 			CanvasUI.GetComponent<PauseMenu>().gameOver = true;
 			// todo: game over sound?
 		}
@@ -470,8 +500,7 @@ public class Player : MonoBehaviour
 	}
 
 	private IEnumerator BlinkCoroutine() {
-		Color defaultColor = spriteRenderer.color;
-		Color blinkColor = new Color(1, 1, 1,1);
+		Color blinkColor = new Color(1, 1, 1, 0.5f);
 
 		spriteRenderer.color = blinkColor;
 		yield return new WaitForSeconds(0.1f);
@@ -514,6 +543,52 @@ public class Player : MonoBehaviour
 		knockback = false;
 	}
 
+	// Freeze
+	public void Freeze()
+	{
+		if (isFrozen == true)                                      // if coroutine
+		{
+			return;
+		}
+		StartCoroutine(FreezeCoroutine(1));           // start new
+	}
+
+	public IEnumerator FreezeCoroutine(float seconds)
+	{
+		Color freezeColor = new Color(1, 1, 1, 0.7f);
+
+		isFrozen = true;
+		StopCoroutine(BlinkCoroutine());
+		spriteRenderer.color = freezeColor;
+		freezeAnimator.SetBool("Freeze", true);
+		rb.constraints = RigidbodyConstraints2D.FreezeAll;
+
+		yield return new WaitForSeconds(seconds);
+		rb.constraints = RigidbodyConstraints2D.FreezeRotation;    // get freeze rotation back
+		isFrozen = false;
+		spriteRenderer.color = defaultColor;
+		freezeAnimator.SetBool("Freeze", false);
+	}
+
+	// // Slow
+	// public void Slow(int slowDuration)
+	// {
+	// 	if (isSlowed == true)                                      // if coroutine
+	// 	{
+	// 		StopCoroutine((SlowCoroutine(slowDuration)));          // stop it
+	// 	}
+	// 	StartCoroutine(SlowCoroutine(slowDuration));               // start new
+	// }
+
+	// public IEnumerator SlowCoroutine(int seconds)
+	// {
+	// 	isSlowed = true;
+	// 	currentMoveSpeed = baseMoveSpeed / 2;
+	// 	yield return new WaitForSeconds(seconds);
+	// 	isSlowed = false;
+	// 	currentMoveSpeed = baseMoveSpeed;
+	// }
+
 	// Burn
 	public void Burn()
 	{
@@ -529,12 +604,12 @@ public class Player : MonoBehaviour
 	{
 		// audioManager.PlayOneShot("EffectBurning");
 		isBurning = true;
-		childAnimator.SetTrigger("Burn");
+		burnAnimator.SetTrigger("Burn");
 		InvokeRepeating("TakeBurnDamage", 0.0f, 0.2f);
 		yield return new WaitForSeconds(2);
 		CancelInvoke("TakeBurnDamage");
 		isBurning = false;
-		childAnimator.ResetTrigger("Burn");
+		burnAnimator.ResetTrigger("Burn");
 	}
 
 	IEnumerator ShootRay()

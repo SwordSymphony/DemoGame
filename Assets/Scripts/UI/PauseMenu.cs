@@ -8,6 +8,7 @@ public class PauseMenu : MonoBehaviour
 	public static bool gameIsPaused = false;
 	public GameObject PauseMenuUI;
 	public GameObject SettingsUI;
+	public LootProgress lootProgress;
 	public static AudioManager audioManager;
 
 	public bool gameOver;
@@ -66,6 +67,8 @@ public class PauseMenu : MonoBehaviour
 
 		audioManager.Stop("SagaOfTheSeaWolves");
 		audioManager.Play("RunningWild", true);
+
+		SaveSystem.SaveLootProgress(lootProgress);
 	}
 
 	public void Settings()

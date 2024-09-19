@@ -13,8 +13,13 @@ public class EnemyRed : MonoBehaviour
 	private SpriteRenderer spriteRenderer;
 	public static AudioManager audioManager;
 	public Rigidbody2D rb;
+
 	public Animator animator;
-	public Animator childAnimator;
+	public Animator burnAnimator;
+	public Animator freezeAnimator;
+	public Animator fearAnimator;
+	public Animator slowAnimator;
+
 	public LayerMask PlayerLayer;
 	public LayerMask RedEnemyLayer;
 	public GameObject HealthBarRedPrefab;
@@ -152,15 +157,15 @@ public class EnemyRed : MonoBehaviour
 		var angle = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
 		// animator.SetBool("Attack", true);
 
-		transform.GetChild(2).gameObject.SetActive(true);
-		transform.GetChild(2).transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+		transform.GetChild(5).gameObject.SetActive(true);
+		transform.GetChild(5).transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
 		yield return new WaitForSeconds(2.0f);
 
 		isFireBreathing = false;
 		ShootCooldown = true;
 		// animator.SetBool("RamAttack", false);
-		transform.GetChild(2).gameObject.SetActive(false);
+		transform.GetChild(5).gameObject.SetActive(false);
 		yield return new WaitForSeconds(shootCooldownDuration);
 
 		ShootCooldown = false;
@@ -174,15 +179,15 @@ public class EnemyRed : MonoBehaviour
 		var angle = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
 		// animator.SetBool("Attack", true);
 
-		transform.GetChild(1).gameObject.SetActive(true);
-		transform.GetChild(1).transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+		transform.GetChild(4).gameObject.SetActive(true);
+		transform.GetChild(4).transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
 		yield return new WaitForSeconds(0.3f);
 
 		isBiting = false;
 		attackCooldown = true;
 		// animator.SetBool("RamAttack", false);
-		transform.GetChild(1).gameObject.SetActive(false);
+		transform.GetChild(4).gameObject.SetActive(false);
 		yield return new WaitForSeconds(attackCooldownDuration);
 
 		attackCooldown = false;
@@ -220,13 +225,13 @@ public class EnemyRed : MonoBehaviour
 	public IEnumerator FreezeCoroutine(float seconds)
 	{
 		isFrozen = true;
-		childAnimator.SetBool("Freeze", true);
+		freezeAnimator.SetBool("Freeze", true);
 		animator.SetBool("isMoving", false);
 		rb.constraints = RigidbodyConstraints2D.FreezeAll;
 		yield return new WaitForSeconds(seconds);
 		rb.constraints = RigidbodyConstraints2D.FreezeRotation;    // get freeze rotation back
 		isFrozen = false;
-		childAnimator.SetBool("Freeze", false);
+		freezeAnimator.SetBool("Freeze", false);
 		animator.SetBool("isMoving", true);
 	}
 
@@ -284,12 +289,12 @@ public class EnemyRed : MonoBehaviour
 	{
 		audioManager.PlayOneShot("EffectBurning");
 		isBurning = true;
-		childAnimator.SetBool("Burn", true);
+		burnAnimator.SetBool("Burn", true);
 		InvokeRepeating("TakeBurnDamage", 0.0f, 0.2f);
 		yield return new WaitForSeconds(seconds);
 		CancelInvoke("TakeBurnDamage");
 		isBurning = false;
-		childAnimator.SetBool("Burn", false);
+		burnAnimator.SetBool("Burn", false);
 		// audioManager.Stop("EffectBurning");
 	}
 

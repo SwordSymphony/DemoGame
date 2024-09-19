@@ -14,8 +14,13 @@ public class EnemyGreen : MonoBehaviour
 	private SpriteRenderer spriteRenderer;
 	public static AudioManager audioManager;
 	public Rigidbody2D rb;
+
 	public Animator animator;
-	public Animator childAnimator;
+	public Animator burnAnimator;
+	public Animator freezeAnimator;
+	public Animator fearAnimator;
+	public Animator slowAnimator;
+
 	public LayerMask PlayerLayer;
 	public LayerMask GreenEnemyLayer;
 	public GameObject HealthBarGreenPrefab;
@@ -186,27 +191,27 @@ public class EnemyGreen : MonoBehaviour
 		var angle = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
 		// animator.SetBool("Attack", true);
 
-		transform.GetChild(1).gameObject.SetActive(true);
-		transform.GetChild(1).transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+		transform.GetChild(4).gameObject.SetActive(true);
+		transform.GetChild(4).transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 		// audioManager.PlayOneShot("MushroomAttack");
 		yield return new WaitForSeconds(0.05f);
 
-		transform.GetChild(1).gameObject.SetActive(false);
+		transform.GetChild(4).gameObject.SetActive(false);
 		yield return new WaitForSeconds(0.05f);
 
-		transform.GetChild(1).gameObject.SetActive(true);
+		transform.GetChild(4).gameObject.SetActive(true);
 		// audioManager.PlayOneShot("MushroomAttack");
 		yield return new WaitForSeconds(0.05f);
 
-		transform.GetChild(1).gameObject.SetActive(false);
+		transform.GetChild(4).gameObject.SetActive(false);
 		yield return new WaitForSeconds(0.05f);
 
-		transform.GetChild(1).gameObject.SetActive(true);
+		transform.GetChild(4).gameObject.SetActive(true);
 		
 		yield return new WaitForSeconds(0.05f);
 
 		// animator.SetBool("Attack", false);
-		transform.GetChild(1).gameObject.SetActive(false);
+		transform.GetChild(4).gameObject.SetActive(false);
 		attackCooldown = true;
 		isAttacking = false;
 
@@ -247,13 +252,13 @@ public class EnemyGreen : MonoBehaviour
 	public IEnumerator FreezeCoroutine(float seconds)
 	{
 		isFrozen = true;
-		childAnimator.SetBool("Freeze", true);
+		freezeAnimator.SetBool("Freeze", true);
 		animator.SetBool("isMoving", false);
 		rb.constraints = RigidbodyConstraints2D.FreezeAll;
 		yield return new WaitForSeconds(seconds);
 		rb.constraints = RigidbodyConstraints2D.FreezeRotation;    // get freeze rotation back
 		isFrozen = false;
-		childAnimator.SetBool("Freeze", false);
+		freezeAnimator.SetBool("Freeze", false);
 		animator.SetBool("isMoving", true);
 	}
 
@@ -311,12 +316,12 @@ public class EnemyGreen : MonoBehaviour
 	{
 		audioManager.PlayOneShot("EffectBurning");
 		isBurning = true;
-		childAnimator.SetBool("Burn", true);
+		burnAnimator.SetBool("Burn", true);
 		InvokeRepeating("TakeBurnDamage", 0.0f, 0.2f);
 		yield return new WaitForSeconds(seconds);
 		CancelInvoke("TakeBurnDamage");
 		isBurning = false;
-		childAnimator.SetBool("Burn", false);
+		burnAnimator.SetBool("Burn", false);
 		// audioManager.Stop("EffectBurning");
 	}
 

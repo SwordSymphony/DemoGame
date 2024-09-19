@@ -6,9 +6,7 @@ using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
-
-	public static AudioManager instance;
-
+	// public static AudioManager instance;
 	public AudioMixerGroup mixerGroup;
 
 	public Sound[] sounds;
