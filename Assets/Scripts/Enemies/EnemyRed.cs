@@ -146,6 +146,7 @@ public class EnemyRed : MonoBehaviour
 		rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 		isFrozen = false;
 		animator.SetBool("isMoving", true);
+		animator.SetBool("spawned", true);
 	}
 
 	// shoot
@@ -268,9 +269,11 @@ public class EnemyRed : MonoBehaviour
 	public IEnumerator FearCoroutine(int seconds)
 	{
 		isFeared = true;
+		fearAnimator.SetBool("Fear", true);
 		currentMoveSpeed = baseMoveSpeed * 2;
 		yield return new WaitForSeconds(seconds);
 		isFeared = false;
+		fearAnimator.SetBool("Fear", false);
 		currentMoveSpeed = baseMoveSpeed;
 	}
 

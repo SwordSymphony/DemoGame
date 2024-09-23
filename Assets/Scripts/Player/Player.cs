@@ -59,10 +59,14 @@ public class Player : MonoBehaviour
 	public float attackSpeedDark;
 	public float attackSpeedFire;
 	public float attackSpeedLightning;
+	// bullet force
+	public float bulletForceToxic;
+	public float bulletForceDark;
+	public float bulletForceFire;
+	public float bulletForceLightning;
 
 	float invulnerabilityDuration;
 
-	// float attackCooldown;
 	float attackSpeed;
 
 	float lastAttackTime;
@@ -73,8 +77,13 @@ public class Player : MonoBehaviour
 
 	// ray
 	LayerMask mask;
+	public GameObject frostRayStartPrefab;
+	public GameObject frostRayMidPrefab;
 	public GameObject ColdImpactPrefab;
+
 	public LineRenderer lineRenderer;
+	public LineRenderer lineRenderer2;
+	public LineRenderer lineRenderer3;
 
 	public float bulletForce;
 	public float moveSpeed;
@@ -133,7 +142,6 @@ public class Player : MonoBehaviour
 		weaponType = WeaponBluePrefab;
 		selectWeapon(0);
 		projectilesAmount = projectiles[0];
-		// attackCooldown = cooldownCold;
 		attackSpeed = attackSpeedCold;
 		animator.SetInteger("weaponType", 0);
 
@@ -265,19 +273,12 @@ public class Player : MonoBehaviour
 			rb.MovePosition(rb.position + movement.normalized * moveSpeed * Time.fixedDeltaTime);  // movement
 		}
 
-		Vector3 shootDirection2 = ShootPoint2.transform.position - RotatePoint.transform.position;
-		Vector3 shootDirection3 = ShootPoint3.transform.position - RotatePoint.transform.position;
-		Vector3 shootDirection4 = ShootPoint4.transform.position - RotatePoint.transform.position;
-		Vector3 shootDirection5 = ShootPoint5.transform.position - RotatePoint.transform.position;
-		// var angle1 = Mathf.Atan2(aim.y, aim.x) * Mathf.Rad2Deg;
 		aim = mousePos - rb.position;
-		aim2 = shootDirection2;
-		aim3 = shootDirection3;
-		aim4 = shootDirection4;
-		aim5 = shootDirection5;
-		
-		// animator.SetFloat("MousePosX", aim.x);
-		// animator.SetFloat("MousePosY", aim.y);
+		aim2 = ShootPoint2.transform.position - RotatePoint.transform.position;
+		aim3 = ShootPoint3.transform.position - RotatePoint.transform.position;
+		aim4 = ShootPoint4.transform.position - RotatePoint.transform.position;
+		aim5 = ShootPoint5.transform.position - RotatePoint.transform.position;
+
 		var angle = Mathf.Atan2(aim.y, aim.x) * Mathf.Rad2Deg;
 		RotatePoint.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
@@ -296,7 +297,8 @@ public class Player : MonoBehaviour
 		isDashOnCooldown = true;
 		isDashing = true;
 
-		gameObject.GetComponent<CircleCollider2D>().enabled = false;
+		gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
+		gameObject.GetComponent<CircleCollider2D>().enabled = true;
 		int force = 3000;
 		rb.AddForce(movement * force, ForceMode2D.Impulse);
 		audioManager.PlayOneShot("Dash");
@@ -304,7 +306,8 @@ public class Player : MonoBehaviour
 
 		rb.velocity = Vector3.zero;
 		isDashing = false;
-		gameObject.GetComponent<CircleCollider2D>().enabled = true;
+		gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
+		gameObject.GetComponent<CircleCollider2D>().enabled = false;
 
 		yield return new WaitForSeconds(dashCooldown);
 		isDashOnCooldown = false;
@@ -317,8 +320,6 @@ public class Player : MonoBehaviour
 			if (weaponType != WeaponBluePrefab)
 			{
 				weaponType = WeaponBluePrefab;
-				// WeaponsBarPrefab.gameObject.GetComponent<Image>().enabled = false; // it works!
-				// WeaponsBarPrefab.gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().enabled = false; // it works too!
 				selectWeapon(0);
 				projectilesAmount = projectiles[0];
 				attackSpeed = attackSpeedCold;
@@ -332,6 +333,7 @@ public class Player : MonoBehaviour
 				weaponType = WeaponGreenPrefab;
 				projectilesAmount = projectiles[1];
 				attackSpeed = attackSpeedToxic;
+				bulletForce = bulletForceToxic;
 				selectWeapon(1);
 				animator.SetInteger("weaponType", 1);
 			}
@@ -343,6 +345,7 @@ public class Player : MonoBehaviour
 				weaponType = WeaponPurplePrefab;
 				projectilesAmount = projectiles[2];
 				attackSpeed = attackSpeedDark;
+				bulletForce = bulletForceDark;
 				selectWeapon(2);
 				animator.SetInteger("weaponType", 2);
 			}
@@ -354,6 +357,7 @@ public class Player : MonoBehaviour
 				weaponType = WeaponRedPrefab;
 				projectilesAmount = projectiles[3];
 				attackSpeed = attackSpeedFire;
+				bulletForce = bulletForceFire;
 				selectWeapon(3);
 				animator.SetInteger("weaponType", 3);
 			}
@@ -365,6 +369,7 @@ public class Player : MonoBehaviour
 				weaponType = WeaponYellowPrefab;
 				projectilesAmount = projectiles[4];
 				attackSpeed = attackSpeedLightning;
+				bulletForce = bulletForceLightning;
 				selectWeapon(4);
 				animator.SetInteger("weaponType", 4);
 			}
@@ -617,24 +622,25 @@ public class Player : MonoBehaviour
 
 	IEnumerator ShootRay()
 	{
-		Vector3 rayToPoint = new Vector3(aim.x, aim.y, 0);
-
-		RaycastHit2D target = Physics2D.Raycast(ShootPoint1.transform.position, rayToPoint, 20.0f, ~mask);
-		Vector2 instancePoint = new Vector2();
-		instancePoint = transform.position + rayToPoint;
+		Vector3 direction = new Vector3(mousePos.x - ShootPoint1.transform.position.x, mousePos.y - ShootPoint1.transform.position.y, 0);
+		float distance = Vector2.Distance(mousePos, ShootPoint1.transform.position);
+		RaycastHit2D target = Physics2D.Raycast(ShootPoint1.transform.position, direction, distance, ~mask); // ray to direction
+		Vector3 impactPoint = mousePos; // default impact point to mouse
 
 		if (target)
 		{
-			instancePoint = target.point;
+			impactPoint = target.transform.position; // impact point if ray collides
 		}
-		lineRenderer.SetPosition(0, ShootPoint1.transform.position);
-		lineRenderer.SetPosition(1, instancePoint);
+		lineRenderer.SetPosition(0, ShootPoint1.transform.position); // line from start point
+		lineRenderer.SetPosition(1, impactPoint);                       // line to end point
 
-		GameObject instance = Instantiate(ColdImpactPrefab, instancePoint, Quaternion.identity);
+		GameObject instance = Instantiate(ColdImpactPrefab, impactPoint, Quaternion.identity); // instantiate prefab to end point
 		instance.transform.Rotate(0.0f, 0.0f, Mathf.Atan2(aim.y, aim.x) * Mathf.Rad2Deg);
+		GameObject instanceStart = Instantiate(frostRayStartPrefab, ShootPoint1.transform.position, Quaternion.identity);
+		instanceStart.transform.Rotate(0.0f, 0.0f, Mathf.Atan2(aim.y, aim.x) * Mathf.Rad2Deg);
 
 		lineRenderer.enabled = true;
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(0.6f);
 		lineRenderer.enabled = false;
 	}
 

@@ -135,6 +135,7 @@ public class EnemyPurple : MonoBehaviour
 		collider.enabled = true;
 		rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 		isFrozen = false;
+		animator.SetBool("spawned", true);
 	}
 
 	// attack
@@ -224,9 +225,11 @@ public class EnemyPurple : MonoBehaviour
 	public IEnumerator FearCoroutine(int seconds)
 	{
 		isFeared = true;
+		fearAnimator.SetBool("Fear", true);
 		currentMoveSpeed = baseMoveSpeed * 2;
 		yield return new WaitForSeconds(seconds);
 		isFeared = false;
+		fearAnimator.SetBool("Fear", false);
 		currentMoveSpeed = baseMoveSpeed;
 	}
 

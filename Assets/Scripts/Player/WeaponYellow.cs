@@ -31,6 +31,8 @@ public class WeaponYellow : MonoBehaviour
 
 		force = 15;
 		// contactFilter = ~PlayerLayer;
+
+		Destroy(gameObject, 1);
 	}
 
 	void OnTriggerEnter2D()

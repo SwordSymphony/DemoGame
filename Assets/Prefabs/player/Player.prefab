@@ -73,13 +73,13 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 2, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.8
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -375,7 +375,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7264302028673609835
 Transform:
   m_ObjectHideFlags: 0
@@ -1552,11 +1552,11 @@ GameObject:
   - component: {fileID: 8572730021584086867}
   - component: {fileID: 1973352821990838476}
   - component: {fileID: 481372890927920033}
+  - component: {fileID: 6068643037511440292}
   - component: {fileID: 369900998412130215}
   - component: {fileID: 8918243115702406654}
   - component: {fileID: 8071042478231206935}
   - component: {fileID: 5665065008213004940}
-  - component: {fileID: 6068643037511440292}
   - component: {fileID: 4319716696330489586}
   m_Layer: 3
   m_Name: Player
@@ -1574,7 +1574,7 @@ Transform:
   m_GameObject: {fileID: 8377968344148975440}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 500, y: 200, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1667,8 +1667,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &369900998412130215
-CircleCollider2D:
+--- !u!70 &6068643037511440292
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1679,7 +1679,7 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 16384
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1699,9 +1699,44 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.7118225, y: -3.8963187}
+  m_Offset: {x: 0.75763464, y: -1.5784142}
+  m_Size: {x: 6.5976715, y: 8.818348}
+  m_Direction: 0
+--- !u!58 &369900998412130215
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8377968344148975440}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 2096895
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.7118231, y: -2.3929892}
   serializedVersion: 2
-  m_Radius: 4.5707703
+  m_Radius: 3.0674376
 --- !u!114 &8918243115702406654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1714,7 +1749,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29d5efe6ea12b5d4980b56aeed5a29a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shield: {fileID: 0}
+  shield: {fileID: 3063636259610894576}
   CanvasUI: {fileID: 0}
   rb: {fileID: 481372890927920033}
   cam: {fileID: 118886288387380698}
@@ -1735,34 +1770,42 @@ MonoBehaviour:
   WeaponPurplePrefab: {fileID: 7348653244791886122, guid: 8131ee484ab25cb49aea962d54a510db, type: 3}
   WeaponRedPrefab: {fileID: 7348653244791886122, guid: c9fac034ba6ad0d4f954bca20aa0c5f4, type: 3}
   WeaponYellowPrefab: {fileID: 7348653244791886122, guid: 20c4c8171429589468fba3d50bbea9ea, type: 3}
-  damageCold: 3
+  damageCold: 1
   damageToxic: 25
-  damageDark: 25
-  damageFire: 25
-  damageLightning: 25
+  damageDark: 28
+  damageFire: 28
+  damageLightning: 20
   coldAoeSize: 1.75
-  toxicAoeSize: 3.5
-  darkAoeSize: 3.5
+  toxicAoeSize: 3
+  darkAoeSize: 3
   fireAoeSize: 3.5
-  lightningAoeSize: 3.5
-  coldImpactSize: 0.5
-  toxicImpactSize: 1
-  darkImpactSize: 1
+  lightningAoeSize: 1.75
+  coldImpactSize: 1
+  toxicImpactSize: 0.8
+  darkImpactSize: 0.8
   fireImpactSize: 1
-  lightningImpactSize: 1
+  lightningImpactSize: 0.5
   attackSpeedCold: 1
   attackSpeedToxic: 1
-  attackSpeedDark: 1
+  attackSpeedDark: 0.8
   attackSpeedFire: 1
-  attackSpeedLightning: 1
-  projectiles: 0100000001000000010000000100000001000000
-  dashCooldown: 0
+  attackSpeedLightning: 1.5
+  bulletForceToxic: 35
+  bulletForceDark: 45
+  bulletForceFire: 50
+  bulletForceLightning: 70
+  projectiles: 0200000002000000020000000200000002000000
+  dashCooldown: 2
+  frostRayStartPrefab: {fileID: 6733580484812970228, guid: 60d0ec13bc2842644b7576aa40193f0b, type: 3}
+  frostRayMidPrefab: {fileID: 7695607651406969617, guid: 96acf8ac89b4f584183c05b71f641f0a, type: 3}
   ColdImpactPrefab: {fileID: 6594934058986649174, guid: a9ebfd3d6faabc24bbe080b29e0d3617, type: 3}
   lineRenderer: {fileID: 6621839135865907248}
+  lineRenderer2: {fileID: 0}
+  lineRenderer3: {fileID: 0}
   bulletForce: 35
   moveSpeed: 15
   healthbar: {fileID: 0}
-  maxHealth: 1000
+  maxHealth: 100
   currentHealth: 0
   shieldAmount: 0
   shieldTimer: 0
@@ -1817,45 +1860,10 @@ MonoBehaviour:
   - {x: 6.0445075, y: -6.8937244, z: 0}
   m_ShapePathHash: 1159393270
   m_Mesh: {fileID: 0}
-  m_InstanceId: 182664
+  m_InstanceId: 225182
   m_LocalBounds:
     m_Center: {x: -0.18412971, y: 0.74767303, z: 0}
     m_Extent: {x: 6.8670654, y: 7.9292803, z: 0}
---- !u!70 &6068643037511440292
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8377968344148975440}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 2096895
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.54622746, y: -2.2361207}
-  m_Size: {x: 8.147978, y: 10.133761}
-  m_Direction: 0
 --- !u!95 &4319716696330489586
 Animator:
   serializedVersion: 5

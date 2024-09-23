@@ -31,6 +31,7 @@ public class WeaponGreen : MonoBehaviour
 
 		slowDuration = 4;
 		// contactFilter = ~PlayerLayer;
+		Destroy(gameObject, 1);
 	}
 
 	void OnTriggerEnter2D()

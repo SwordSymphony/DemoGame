@@ -33,6 +33,7 @@ public class WeaponPurple : MonoBehaviour
 
 		fearDuration = 4;
 		// contactFilter = ~PlayerLayer;
+		Destroy(gameObject, 1);
 	}
 
 	void OnTriggerEnter2D()

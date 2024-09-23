@@ -34,6 +34,7 @@ public class WeaponRed : MonoBehaviour
 		burnDuration = 4;
 		burnDamage= 4;
 		// contactFilter = ~PlayerLayer;
+		Destroy(gameObject, 1);
 	}
 
 	void OnTriggerEnter2D()
