@@ -66,10 +66,8 @@ public class Player : MonoBehaviour
 	public float bulletForceLightning;
 
 	float invulnerabilityDuration;
-
 	float attackSpeed;
 
-	float lastAttackTime;
 	int projectilesAmount;
 	public List<int> projectiles = new List<int>(){1,1,1,1,1};
 
@@ -82,13 +80,12 @@ public class Player : MonoBehaviour
 	GameObject frostImpactInstance;
 	GameObject frostStartInstance;
 	bool rayActive;
-
 	public LineRenderer lineRenderer;
-	public LineRenderer lineRenderer2;
-	public LineRenderer lineRenderer3;
 
 	public float bulletForce;
 	public float moveSpeed;
+	public float pickUpRadius;
+	LayerMask lootLayerMask;
 
 	// hp
 	public HealthBar healthbar;
@@ -124,6 +121,7 @@ public class Player : MonoBehaviour
 		audioManager = FindObjectOfType<AudioManager>();
 		rb = GetComponent<Rigidbody2D>(); 
 		mask = LayerMask.GetMask("Ignore Raycast");
+		lootLayerMask = LayerMask.GetMask("Loot");
 
 		defaultColor = spriteRenderer.color;
 
@@ -276,6 +274,8 @@ public class Player : MonoBehaviour
 
 	void FixedUpdate()
 	{
+		CheckForLoot();
+
 		if (!knockback && !isDashing)
 		{
 			rb.MovePosition(rb.position + movement.normalized * moveSpeed * Time.fixedDeltaTime);  // movement
@@ -297,6 +297,15 @@ public class Player : MonoBehaviour
 		else
 		{
 			spriteRenderer.flipX = false;
+		}
+	}
+
+	void CheckForLoot()
+	{
+		Collider2D[] loot = Physics2D.OverlapCircleAll(transform.position, pickUpRadius, lootLayerMask);
+		foreach (Collider2D i in loot)
+		{
+			i.GetComponent<Loot>().PlayerInRadius();
 		}
 	}
 
@@ -627,30 +636,6 @@ public class Player : MonoBehaviour
 		isBurning = false;
 		burnAnimator.ResetTrigger("Burn");
 	}
-
-	// IEnumerator ShootRay()
-	// {
-	// 	Vector3 direction = new Vector3(mousePos.x - ShootPoint1.transform.position.x, mousePos.y - ShootPoint1.transform.position.y, 0);
-	// 	float distance = Vector2.Distance(mousePos, ShootPoint1.transform.position);
-	// 	RaycastHit2D target = Physics2D.Raycast(ShootPoint1.transform.position, direction, distance, ~mask); // ray to direction
-	// 	Vector3 impactPoint = mousePos; // default impact point to mouse
-
-	// 	if (target)
-	// 	{
-	// 		impactPoint = target.transform.position; // impact point if ray collides
-	// 	}
-	// 	lineRenderer.SetPosition(0, ShootPoint1.transform.position); // line from start point
-	// 	lineRenderer.SetPosition(1, impactPoint);                       // line to end point
-
-	// 	GameObject instance = Instantiate(frostRayImpactPrefab, impactPoint, Quaternion.identity); // instantiate prefab to end point
-	// 	instance.transform.Rotate(0.0f, 0.0f, Mathf.Atan2(aim.y, aim.x) * Mathf.Rad2Deg);
-	// 	GameObject instanceStart = Instantiate(frostRayStartPrefab, ShootPoint1.transform.position, Quaternion.identity);
-	// 	instanceStart.transform.Rotate(0.0f, 0.0f, Mathf.Atan2(aim.y, aim.x) * Mathf.Rad2Deg);
-
-	// 	lineRenderer.enabled = true;
-	// 	yield return new WaitForSeconds(0.6f);
-	// 	lineRenderer.enabled = false;
-	// }
 
 	void ShootRay()
 	{

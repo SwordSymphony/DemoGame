@@ -10,6 +10,7 @@ public class Loot : MonoBehaviour
 	public float speed;
 	public bool rare;
 	public int type;
+	bool playerInRadius;
 
 	void Start()
 	{
@@ -19,11 +20,18 @@ public class Loot : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		transform.position = Vector2.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
-		if (transform.position == player.transform.position)
+		if (playerInRadius)
 		{
-			lootProgress.AddLoot(rare, type);
-			Destroy(gameObject);
+			transform.position = Vector2.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+			if (transform.position == player.transform.position)
+			{
+				lootProgress.AddLoot(rare, type);
+				Destroy(gameObject);
+			}
 		}
+	}
+	public void PlayerInRadius()
+	{
+		playerInRadius = true;
 	}
 }
