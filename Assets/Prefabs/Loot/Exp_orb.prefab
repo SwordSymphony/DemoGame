@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3520085056722684840}
   - component: {fileID: 9006408806353787315}
   - component: {fileID: 1231966549270238739}
+  - component: {fileID: 2224186887265268667}
   m_Layer: 0
   m_Name: Exp_orb
   m_TagString: Exp
@@ -29,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 556.2, y: 307.16, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -75,8 +76,8 @@ SpriteRenderer:
   m_SortingLayerID: 785595127
   m_SortingLayer: 5
   m_SortingOrder: 2
-  m_Sprite: {fileID: -2413806693520163455, guid: c1d1436230249e74f9e69f171f7f7043, type: 3}
-  m_Color: {r: 0.14827326, g: 0.847397, b: 0.9245283, a: 1}
+  m_Sprite: {fileID: 21300000, guid: ae85e4be08fdf804ab37008cf2eda156, type: 3}
+  m_Color: {r: 0.8365163, g: 0.45370036, b: 0.9308176, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -102,7 +103,7 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.603
-  m_Color: {r: 0, g: 0.8134837, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.51886785, b: 0.8528588, a: 0.8509804}
   m_Intensity: 15
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
@@ -148,4 +149,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd15a59c9066cf489bd8dc50e4b340d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 19
+  speed: 25
+--- !u!95 &2224186887265268667
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4665254131019901452}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 43149ce0e89631849810e07053608c7b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

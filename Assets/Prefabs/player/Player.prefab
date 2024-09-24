@@ -607,8 +607,8 @@ Transform:
   m_GameObject: {fileID: 3063636259610894576}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.3599648, y: 2.3199968, z: 7.2516265}
-  m_LocalScale: {x: 3.3333328, y: 3.3333328, z: 1}
+  m_LocalPosition: {x: 0.36, y: 1.37, z: 7.2516265}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8572730021584086867}
@@ -653,9 +653,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 50c2dd52640b84241a024d6bee276d93, type: 3}
-  m_Color: {r: 0.7735849, g: 0.7735849, b: 0.7735849, a: 1}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: d7db7e4eb76d942408556f4033f32125, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -675,7 +675,7 @@ Animator:
   m_GameObject: {fileID: 3063636259610894576}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8da5754e9554dc741af7cb5a9747face, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1770,7 +1770,7 @@ MonoBehaviour:
   WeaponPurplePrefab: {fileID: 7348653244791886122, guid: 8131ee484ab25cb49aea962d54a510db, type: 3}
   WeaponRedPrefab: {fileID: 7348653244791886122, guid: c9fac034ba6ad0d4f954bca20aa0c5f4, type: 3}
   WeaponYellowPrefab: {fileID: 7348653244791886122, guid: 20c4c8171429589468fba3d50bbea9ea, type: 3}
-  damageCold: 1
+  damageCold: 8
   damageToxic: 25
   damageDark: 28
   damageFire: 28
@@ -1783,7 +1783,7 @@ MonoBehaviour:
   coldImpactSize: 1
   toxicImpactSize: 0.8
   darkImpactSize: 0.8
-  fireImpactSize: 1
+  fireImpactSize: 2
   lightningImpactSize: 0.5
   attackSpeedCold: 1
   attackSpeedToxic: 1
@@ -1797,8 +1797,7 @@ MonoBehaviour:
   projectiles: 0200000002000000020000000200000002000000
   dashCooldown: 2
   frostRayStartPrefab: {fileID: 6733580484812970228, guid: 60d0ec13bc2842644b7576aa40193f0b, type: 3}
-  frostRayMidPrefab: {fileID: 7695607651406969617, guid: 96acf8ac89b4f584183c05b71f641f0a, type: 3}
-  ColdImpactPrefab: {fileID: 6594934058986649174, guid: a9ebfd3d6faabc24bbe080b29e0d3617, type: 3}
+  frostRayImpactPrefab: {fileID: 6594934058986649174, guid: a9ebfd3d6faabc24bbe080b29e0d3617, type: 3}
   lineRenderer: {fileID: 6621839135865907248}
   lineRenderer2: {fileID: 0}
   lineRenderer3: {fileID: 0}
@@ -1860,7 +1859,7 @@ MonoBehaviour:
   - {x: 6.0445075, y: -6.8937244, z: 0}
   m_ShapePathHash: 1159393270
   m_Mesh: {fileID: 0}
-  m_InstanceId: 225182
+  m_InstanceId: 121104
   m_LocalBounds:
     m_Center: {x: -0.18412971, y: 0.74767303, z: 0}
     m_Extent: {x: 6.8670654, y: 7.9292803, z: 0}

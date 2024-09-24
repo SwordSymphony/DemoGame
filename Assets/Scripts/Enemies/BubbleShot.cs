@@ -30,6 +30,11 @@ public class BubbleShot : MonoBehaviour
 			target.gameObject.GetComponent<Player>().Freeze();
 			target.gameObject.GetComponent<Player>().TakeDamage(projectileDamage, transform.position, 20, false);
 		}
+		animator.SetBool("exploded", true);
+	}
+
+	public void SelfDestruct()
+	{
 		Destroy(gameObject);
 	}
 }
