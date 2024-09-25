@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
 	public GameObject ShootPoint5;
 	public GameObject WeaponsBarPrefab;
 	GameObject weaponType;
+	int weaponSelected;
 	
 	public GameObject WeaponBluePrefab;   // weapon against blue enemies
 	public GameObject WeaponGreenPrefab;  // weapon against green enemies
@@ -113,6 +114,7 @@ public class Player : MonoBehaviour
 	bool invulnerable;
 	bool isBurning;
 	bool isFrozen;
+	bool spread;
 
 	void Start ()
 	{
@@ -141,6 +143,7 @@ public class Player : MonoBehaviour
 		// current weapon
 		weaponType = WeaponBluePrefab;
 		selectWeapon(0);
+		weaponSelected = 0;
 		projectilesAmount = projectiles[0];
 		attackSpeed = attackSpeedCold;
 		animator.SetInteger("weaponType", 0);
@@ -191,6 +194,7 @@ public class Player : MonoBehaviour
 	void Update()
 	{
 		ChangeWeaponType();
+		ChangeWeaponTypeMouse();
 
 		movement.x = Input.GetAxisRaw("Horizontal"); // x input for movement
 		movement.y = Input.GetAxisRaw("Vertical");   // y input for movement
@@ -249,6 +253,7 @@ public class Player : MonoBehaviour
 		}
 	}
 
+	// now calls from animator
 	void Shoot()
 	{
 		switch (projectilesAmount)
@@ -330,6 +335,122 @@ public class Player : MonoBehaviour
 		isDashOnCooldown = false;
 	}
 
+	void ChangeWeaponTypeMouse()
+	{
+		if (Input.GetAxis("Mouse ScrollWheel") > 0f ) // forward
+		{
+			// next weapon
+			switch (weaponSelected)
+			{
+				case 0: // if now cold chosen
+				// select toxic
+					weaponType = WeaponGreenPrefab;
+					projectilesAmount = projectiles[1];
+					attackSpeed = attackSpeedToxic;
+					bulletForce = bulletForceToxic;
+					selectWeapon(1);
+					animator.SetInteger("weaponType", 1);
+					weaponSelected = 1;
+					break;
+				case 1: // if now toxic
+				// select dark
+					weaponType = WeaponPurplePrefab;
+					projectilesAmount = projectiles[2];
+					attackSpeed = attackSpeedDark;
+					bulletForce = bulletForceDark;
+					selectWeapon(2);
+					animator.SetInteger("weaponType", 2);
+					weaponSelected = 2;
+					break;
+				case 2: // if now dark
+				// select fire
+					weaponType = WeaponRedPrefab;
+					projectilesAmount = projectiles[3];
+					attackSpeed = attackSpeedFire;
+					bulletForce = bulletForceFire;
+					selectWeapon(3);
+					animator.SetInteger("weaponType", 3);
+					weaponSelected = 3;
+					break;
+				case 3: // if now fire
+				// select lightning
+					weaponType = WeaponYellowPrefab;
+					projectilesAmount = projectiles[4];
+					attackSpeed = attackSpeedLightning;
+					bulletForce = bulletForceLightning;
+					selectWeapon(4);
+					animator.SetInteger("weaponType", 4);
+					weaponSelected = 4;
+					break;
+				case 4: // if now lightning
+				// select cold
+					weaponType = WeaponBluePrefab;
+					selectWeapon(0);
+					projectilesAmount = projectiles[0];
+					attackSpeed = attackSpeedCold;
+					animator.SetInteger("weaponType", 0);
+					weaponSelected = 0;
+					break;
+			}
+		}
+		else if (Input.GetAxis("Mouse ScrollWheel") < 0f ) // backwards
+		{
+			// previous weapon
+			switch (weaponSelected)
+			{
+				case 0: // if now cold chosen
+				// select lightning
+					weaponType = WeaponYellowPrefab;
+					projectilesAmount = projectiles[4];
+					attackSpeed = attackSpeedLightning;
+					bulletForce = bulletForceLightning;
+					selectWeapon(4);
+					animator.SetInteger("weaponType", 4);
+					weaponSelected = 4;
+					break;
+				case 1: // if now toxic
+				// select cold
+					weaponType = WeaponBluePrefab;
+					selectWeapon(0);
+					projectilesAmount = projectiles[0];
+					attackSpeed = attackSpeedCold;
+					animator.SetInteger("weaponType", 0);
+					weaponSelected = 0;
+					break;
+				case 2: // if now dark
+				// select toxic
+					weaponType = WeaponGreenPrefab;
+					projectilesAmount = projectiles[1];
+					attackSpeed = attackSpeedToxic;
+					bulletForce = bulletForceToxic;
+					selectWeapon(1);
+					animator.SetInteger("weaponType", 1);
+					weaponSelected = 1;
+					break;
+				case 3: // if now fire
+				// select dark
+					weaponType = WeaponPurplePrefab;
+					projectilesAmount = projectiles[2];
+					attackSpeed = attackSpeedDark;
+					bulletForce = bulletForceDark;
+					selectWeapon(2);
+					animator.SetInteger("weaponType", 2);
+					weaponSelected = 2;
+					break;
+				case 4: // if now lightning
+				// select fire
+					weaponType = WeaponRedPrefab;
+					projectilesAmount = projectiles[3];
+					attackSpeed = attackSpeedFire;
+					bulletForce = bulletForceFire;
+					selectWeapon(3);
+					animator.SetInteger("weaponType", 3);
+					weaponSelected = 3;
+					break;
+			}
+		}
+	}
+
 	void ChangeWeaponType()
 	{
 		if (Input.GetKey(KeyCode.Alpha1))
@@ -341,6 +462,7 @@ public class Player : MonoBehaviour
 				projectilesAmount = projectiles[0];
 				attackSpeed = attackSpeedCold;
 				animator.SetInteger("weaponType", 0);
+				weaponSelected = 0;
 			}
 		}
 		else if (Input.GetKey(KeyCode.Alpha2))
@@ -353,6 +475,7 @@ public class Player : MonoBehaviour
 				bulletForce = bulletForceToxic;
 				selectWeapon(1);
 				animator.SetInteger("weaponType", 1);
+				weaponSelected = 1;
 			}
 		}
 		else if (Input.GetKey(KeyCode.Alpha3))
@@ -365,6 +488,7 @@ public class Player : MonoBehaviour
 				bulletForce = bulletForceDark;
 				selectWeapon(2);
 				animator.SetInteger("weaponType", 2);
+				weaponSelected = 2;
 			}
 		}
 		else if (Input.GetKey(KeyCode.Alpha4))
@@ -377,6 +501,7 @@ public class Player : MonoBehaviour
 				bulletForce = bulletForceFire;
 				selectWeapon(3);
 				animator.SetInteger("weaponType", 3);
+				weaponSelected = 3;
 			}
 		}
 		else if (Input.GetKey(KeyCode.Alpha5))
@@ -389,6 +514,7 @@ public class Player : MonoBehaviour
 				bulletForce = bulletForceLightning;
 				selectWeapon(4);
 				animator.SetInteger("weaponType", 4);
+				weaponSelected = 4;
 			}
 		}
 	}
@@ -680,6 +806,17 @@ public class Player : MonoBehaviour
 		aim.Normalize();                                                                        // magnitude to 0.
 		GameObject bullet = Instantiate(weaponType, ShootPoint1.transform.position, Quaternion.identity);   // instantiate bullet.
 		Rigidbody2D rbBullet = bullet.GetComponent<Rigidbody2D>();                              // Get RB.
+
+		if (spread)
+		{
+			Vector2 aimWithSpread = new Vector2();
+			float spread = Random.Range(-20, 20);
+			aimWithSpread = Quaternion.AngleAxis(spread, Vector3.forward) * aim;
+
+			rbBullet.transform.Rotate(0.0f, 0.0f, Mathf.Atan2(aimWithSpread.y, aimWithSpread.x) * Mathf.Rad2Deg);       // Rotate bullet.
+			rbBullet.AddForce(aimWithSpread * bulletForce, ForceMode2D.Impulse);                              // Add force to bullet.
+			return;
+		}
 
 		rbBullet.transform.Rotate(0.0f, 0.0f, Mathf.Atan2(aim.y, aim.x) * Mathf.Rad2Deg);       // Rotate bullet.
 		rbBullet.AddForce(aim * bulletForce, ForceMode2D.Impulse);                              // Add force to bullet.

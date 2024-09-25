@@ -131,7 +131,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 278540
+    m_Bits: 2375692
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -148,8 +148,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 1.5367768, y: -0.22030708}
-  m_Size: {x: 8.413075, y: 4.331029}
+  m_Offset: {x: 1.129889, y: 0.060309343}
+  m_Size: {x: 7.5993276, y: 2.647181}
   m_Direction: 1
 --- !u!114 &5803505002992216950
 MonoBehaviour:
@@ -171,6 +171,8 @@ MonoBehaviour:
   impactSize: 0
   fearDuration: 0
   isFlipped: 0
+  detectRadius: 0
+  speed: 0
 --- !u!95 &952480869417637228
 Animator:
   serializedVersion: 5

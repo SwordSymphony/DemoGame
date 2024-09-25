@@ -198,7 +198,6 @@ public class EnemyRed : MonoBehaviour
 	{
 		if (target.gameObject == player && isBiting)
 		{
-			Debug.Log("bite attack");
 			target.gameObject.GetComponent<Player>().TakeDamage(10, transform.position, 30, false);
 		}
 	}
@@ -207,7 +206,6 @@ public class EnemyRed : MonoBehaviour
 	{
 		if (target.gameObject == player && isFireBreathing)
 		{
-			Debug.Log("fire breath attack");
 			target.gameObject.GetComponent<Player>().TakeDamage(1, transform.position, 0, false);
 			target.gameObject.GetComponent<Player>().Burn();
 		}

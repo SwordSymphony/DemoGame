@@ -1794,7 +1794,7 @@ MonoBehaviour:
   bulletForceDark: 35
   bulletForceFire: 50
   bulletForceLightning: 70
-  projectiles: 0200000002000000020000000200000002000000
+  projectiles: 0100000001000000010000000100000001000000
   dashCooldown: 2
   frostRayStartPrefab: {fileID: 6733580484812970228, guid: 60d0ec13bc2842644b7576aa40193f0b, type: 3}
   frostRayImpactPrefab: {fileID: 6594934058986649174, guid: a9ebfd3d6faabc24bbe080b29e0d3617, type: 3}

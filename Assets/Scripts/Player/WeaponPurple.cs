@@ -20,6 +20,8 @@ public class WeaponPurple : MonoBehaviour
 	public float speed;
 	bool targetFound;
 	Collider2D enemy;
+
+	Vector2 initialVector;
 	
 	ContactFilter2D contactFilter;
 	// public LayerMask PlayerLayer;
@@ -41,27 +43,35 @@ public class WeaponPurple : MonoBehaviour
 		speed = 30.0f;
 
 		fearDuration = 4;
-		Destroy(gameObject, 2);
+		Destroy(gameObject, 2.5f);
+		initialVector = rb.velocity;
 	}
 
 	void FixedUpdate()
 	{
-		if (enemy is null)
+		if (enemy == null)
 		{
 			FindTarget();
 		}
-		else if (enemy is not null && !triggered)
+
+		if (enemy != null && !triggered)
 		{
 			transform.position = Vector2.MoveTowards(transform.position, enemy.transform.position, speed * Time.deltaTime);
 			Vector3 direction = enemy.transform.position - transform.position;
 			transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
+		}
+
+		if (!triggered && rb.velocity == Vector2.zero && enemy == null)
+		{
+			// Destroy(gameObject);
+			rb.velocity = initialVector;
 		}
 	}
 
 	void FindTarget()
 	{
 		enemy = Physics2D.OverlapCircle(transform.position, detectRadius, enemyLayerMask);
-		if (enemy)
+		if (enemy is not null)
 		{
 			rb.velocity = Vector3.zero;
 		}
