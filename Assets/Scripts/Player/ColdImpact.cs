@@ -26,7 +26,7 @@ public class ColdImpact : MonoBehaviour
 		freezeDuration = 2.5f;
 
 		inflictDamage();
-		InvokeRepeating("inflictDamage", 0.0f, 0.2f);
+		InvokeRepeating("inflictDamage", 0.0f, 0.1f);
 	}
 
 	void inflictDamage()

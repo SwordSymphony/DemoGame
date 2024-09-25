@@ -8,12 +8,18 @@ public class WeaponPurple : MonoBehaviour
 	public Rigidbody2D rb;
 	public Animator animator;
 	public GameObject player;
+	LayerMask enemyLayerMask;
 	public int projectileDamage;
 	public float aoeSize;
 	public float impactSize;
 	public int fearDuration;
 
 	public bool isFlipped;
+
+	public float detectRadius;
+	public float speed;
+	bool targetFound;
+	Collider2D enemy;
 	
 	ContactFilter2D contactFilter;
 	// public LayerMask PlayerLayer;
@@ -26,14 +32,39 @@ public class WeaponPurple : MonoBehaviour
 		audioManager.PlayOneShot("DarkCast");
 		player = GameObject.FindGameObjectWithTag("Player");
 		rb = GetComponent<Rigidbody2D>(); 
+		enemyLayerMask = LayerMask.GetMask("PurpleEnemyLayer");
 
 		aoeSize = player.GetComponent<Player>().darkAoeSize;
 		impactSize = player.GetComponent<Player>().darkImpactSize;
 		projectileDamage = player.GetComponent<Player>().damageDark;
+		detectRadius = 15.0f;
+		speed = 30.0f;
 
 		fearDuration = 4;
-		// contactFilter = ~PlayerLayer;
-		Destroy(gameObject, 1);
+		Destroy(gameObject, 2);
+	}
+
+	void FixedUpdate()
+	{
+		if (enemy is null)
+		{
+			FindTarget();
+		}
+		else if (enemy is not null && !triggered)
+		{
+			transform.position = Vector2.MoveTowards(transform.position, enemy.transform.position, speed * Time.deltaTime);
+			Vector3 direction = enemy.transform.position - transform.position;
+			transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
+		}
+	}
+
+	void FindTarget()
+	{
+		enemy = Physics2D.OverlapCircle(transform.position, detectRadius, enemyLayerMask);
+		if (enemy)
+		{
+			rb.velocity = Vector3.zero;
+		}
 	}
 
 	void OnTriggerEnter2D()

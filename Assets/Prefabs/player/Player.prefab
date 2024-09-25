@@ -1791,7 +1791,7 @@ MonoBehaviour:
   attackSpeedFire: 1
   attackSpeedLightning: 1.5
   bulletForceToxic: 35
-  bulletForceDark: 45
+  bulletForceDark: 35
   bulletForceFire: 50
   bulletForceLightning: 70
   projectiles: 0200000002000000020000000200000002000000
@@ -1858,7 +1858,7 @@ MonoBehaviour:
   - {x: 6.0445075, y: -6.8937244, z: 0}
   m_ShapePathHash: 1159393270
   m_Mesh: {fileID: 0}
-  m_InstanceId: 168716
+  m_InstanceId: 80552
   m_LocalBounds:
     m_Center: {x: -0.18412971, y: 0.74767303, z: 0}
     m_Extent: {x: 6.8670654, y: 7.9292803, z: 0}
