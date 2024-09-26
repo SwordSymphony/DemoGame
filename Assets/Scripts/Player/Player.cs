@@ -79,9 +79,14 @@ public class Player : MonoBehaviour
 	public GameObject frostRayStartPrefab;
 	public GameObject frostRayImpactPrefab;
 	GameObject frostImpactInstance;
+	GameObject frostImpactInstance2;
+	GameObject frostImpactInstance3;
 	GameObject frostStartInstance;
 	bool rayActive;
+	bool secondRayActive;
 	public LineRenderer lineRenderer;
+	public LineRenderer lineRenderer2;
+	public LineRenderer lineRenderer3;
 
 	public float bulletForce;
 	public float moveSpeed;
@@ -237,14 +242,20 @@ public class Player : MonoBehaviour
 				}
 				// StartCoroutine(ShootRay());
 				ShootRay();
+				ShootAdditionalRays();
 			}
 		}
 		else if (Input.GetButtonUp("Fire1"))
 		{
 			Destroy(frostImpactInstance);
+			Destroy(frostImpactInstance2);
+			Destroy(frostImpactInstance3);
 			Destroy(frostStartInstance);
 			lineRenderer.enabled = false;
+			lineRenderer2.enabled = false;
+			lineRenderer3.enabled = false;
 			rayActive = false;
+			secondRayActive = false;
 
 			animator.SetBool("Attack", false);
 			animator.SetFloat("AttackSpeed", 1.0f);
@@ -798,6 +809,60 @@ public class Player : MonoBehaviour
 			frostStartInstance.transform.Rotate(0.0f, 0.0f, Mathf.Atan2(aim.y, aim.x) * Mathf.Rad2Deg);
 		}
 		lineRenderer.enabled = true;
+	}
+
+	void ShootAdditionalRays()
+	{
+		// ray 2
+		Vector3 direction = new Vector3(mousePos.x - ShootPoint2.transform.position.x, mousePos.y - ShootPoint2.transform.position.y, 0);
+		float distance = Vector2.Distance(mousePos, ShootPoint2.transform.position);
+		direction = Quaternion.AngleAxis(-30, Vector3.forward) * direction;
+		Vector3 impactPoint = direction + ShootPoint2.transform.position;
+		// ray 3
+		Vector3 direction1 = new Vector3(mousePos.x - ShootPoint3.transform.position.x, mousePos.y - ShootPoint3.transform.position.y, 0);
+		float distance1 = Vector2.Distance(mousePos, ShootPoint3.transform.position);
+		direction1 = Quaternion.AngleAxis(30, Vector3.forward) * direction1;
+		Vector3 impactPoint1 = direction1 + ShootPoint3.transform.position;
+
+		RaycastHit2D target = Physics2D.Raycast(ShootPoint2.transform.position, direction, distance, ~mask); // ray to direction
+		RaycastHit2D target1 = Physics2D.Raycast(ShootPoint3.transform.position, direction1, distance1, ~mask); // ray to direction
+
+		if (target)
+		{
+			impactPoint = target.transform.position; // impact point if ray collides
+		}
+		if (target1)
+		{
+			impactPoint1 = target1.transform.position; // impact point if ray collides
+		}
+		lineRenderer2.SetPosition(0, ShootPoint2.transform.position); // line from start point
+		lineRenderer2.SetPosition(1, impactPoint);                       // line to end point
+
+		lineRenderer3.SetPosition(0, ShootPoint3.transform.position); // line from start point
+		lineRenderer3.SetPosition(1, impactPoint1);                       // line to end point
+
+		if (!secondRayActive) // if no impact instance
+		{
+			frostImpactInstance2 = Instantiate(frostRayImpactPrefab, impactPoint, Quaternion.identity); // instantiate prefab to end point
+			frostImpactInstance2.transform.Rotate(0.0f, 0.0f, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
+
+			frostImpactInstance3 = Instantiate(frostRayImpactPrefab, impactPoint1, Quaternion.identity); // instantiate prefab to end point
+			frostImpactInstance3.transform.Rotate(0.0f, 0.0f, Mathf.Atan2(direction1.y, direction1.x) * Mathf.Rad2Deg);
+			secondRayActive = true;
+		}
+		else // if already exist
+		{
+			// move it
+			frostImpactInstance2.transform.position = impactPoint;
+			frostImpactInstance2.transform.rotation = Quaternion.identity;
+			frostImpactInstance2.transform.Rotate(0.0f, 0.0f, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
+
+			frostImpactInstance3.transform.position = impactPoint1;
+			frostImpactInstance3.transform.rotation = Quaternion.identity;
+			frostImpactInstance3.transform.Rotate(0.0f, 0.0f, Mathf.Atan2(direction1.y, direction1.x) * Mathf.Rad2Deg);
+		}
+		lineRenderer2.enabled = true;
+		lineRenderer3.enabled = true;
 	}
 
 	// shoot 1 straight
