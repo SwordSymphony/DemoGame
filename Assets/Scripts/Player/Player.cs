@@ -708,7 +708,7 @@ public class Player : MonoBehaviour
 	// Freeze
 	public void Freeze()
 	{
-		if (isFrozen == true)                                      // if coroutine
+		if (isFrozen == true || shieldAmount > 0)                                      // if coroutine
 		{
 			return;
 		}
@@ -754,6 +754,11 @@ public class Player : MonoBehaviour
 	// Burn
 	public void Burn()
 	{
+		if (shieldAmount > 0)
+		{
+			return;
+		}
+
 		if (isBurning == true)                                      // if coroutine
 		{
 			CancelInvoke("TakeBurnDamage");
@@ -767,7 +772,7 @@ public class Player : MonoBehaviour
 		// audioManager.PlayOneShot("EffectBurning");
 		isBurning = true;
 		burnAnimator.SetTrigger("Burn");
-		InvokeRepeating("TakeBurnDamage", 0.0f, 0.2f);
+		InvokeRepeating("TakeBurnDamage", 0.3f, 0.3f);
 		yield return new WaitForSeconds(2);
 		CancelInvoke("TakeBurnDamage");
 		isBurning = false;

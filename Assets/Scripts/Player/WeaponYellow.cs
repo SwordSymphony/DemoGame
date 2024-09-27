@@ -16,7 +16,9 @@ public class WeaponYellow : MonoBehaviour
 	ContactFilter2D contactFilter;
 	// public LayerMask PlayerLayer;
 
-	bool triggered;
+	bool exploded;
+	float penetrationCount;
+	float penetrationCountMax;
 
 	void Start()
 	{
@@ -31,13 +33,40 @@ public class WeaponYellow : MonoBehaviour
 
 		force = 15;
 		// contactFilter = ~PlayerLayer;
+		penetrationCountMax = 3;
 
 		Destroy(gameObject, 1);
 	}
 
-	void OnTriggerEnter2D()
+	void OnTriggerEnter2D(Collider2D target)
 	{
-		if (!triggered)
+		if (penetrationCount < penetrationCountMax) // penetrate
+		{
+			switch (target.gameObject.tag)
+				{
+					case "BlueEnemy":
+						target.gameObject.GetComponent<EnemyBlue>().StartCoroutine("KnockbackCoroutine", force);
+						break;
+					case "GreenEnemy":
+						target.gameObject.GetComponent<EnemyGreen>().StartCoroutine("KnockbackCoroutine", force);
+						break;
+					case "PurpleEnemy":
+						target.gameObject.GetComponent<EnemyPurple>().StartCoroutine("KnockbackCoroutine", force);
+						break;
+					case "RedEnemy":
+						target.gameObject.GetComponent<EnemyRed>().StartCoroutine("KnockbackCoroutine", force);
+						break;
+					case "YellowEnemy":
+						target.gameObject.GetComponent<EnemyYellow>().TakeDamage(projectileDamage);
+						target.gameObject.GetComponent<EnemyYellow>().StartCoroutine("KnockbackCoroutine", force);
+						break;
+					case "Obstacle":
+						penetrationCount = penetrationCountMax;
+						break;
+				}
+			penetrationCount++;
+		}
+		if (penetrationCount >= penetrationCountMax && !exploded)//(!triggered)
 		{
 			List <Collider2D> results = new List<Collider2D>();
 			int num = Physics2D.OverlapCircle(transform.position, aoeSize, contactFilter, results);
@@ -66,7 +95,7 @@ public class WeaponYellow : MonoBehaviour
 					}
 				}
 			}
-			triggered = true;
+			exploded = true;
 			animator.SetBool("impact", true);
 			transform.rotation = Quaternion.identity;
 			rb.velocity = Vector3.zero;

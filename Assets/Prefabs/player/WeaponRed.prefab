@@ -169,7 +169,7 @@ MonoBehaviour:
   projectileDamage: 0
   burnDuration: 4
   burnDamage: 4
-  aoeSize: 4
+  aoeSize: 0
   impactSize: 0
 --- !u!95 &3434637739179135493
 Animator:
