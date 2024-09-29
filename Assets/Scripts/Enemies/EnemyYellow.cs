@@ -59,6 +59,7 @@ public class EnemyYellow : MonoBehaviour
 	bool attackCooldown;
 	bool ramAttack;
 	public bool isOverload;
+	float knockbackCounter;
 
 	void Start ()
 	{
@@ -290,10 +291,20 @@ public class EnemyYellow : MonoBehaviour
 	// Knockback
 	public IEnumerator KnockbackCoroutine(int force)
 	{
-		Vector2 direction = GetOppositeVector(1);
-		rb.AddForce(direction * force, ForceMode2D.Impulse);
+		if (knockbackCounter < 3)
+		{
+			Vector2 direction = GetOppositeVector(1);
+			rb.AddForce(direction * force, ForceMode2D.Impulse);
+			knockbackCounter += 1;
+		}
+		else
+		{
+			yield break;
+		}
+		
 		yield return new WaitForSeconds(0.1f);
 		rb.velocity = Vector3.zero;
+		knockbackCounter--;
 	}
 
 	public Vector2 GetOppositeVector(int multiplier)

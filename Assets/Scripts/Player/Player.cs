@@ -247,21 +247,30 @@ public class Player : MonoBehaviour
 		}
 		else if (Input.GetButtonUp("Fire1"))
 		{
-			Destroy(frostImpactInstance);
-			Destroy(frostImpactInstance2);
-			Destroy(frostImpactInstance3);
-			Destroy(frostStartInstance);
-			lineRenderer.enabled = false;
-			lineRenderer2.enabled = false;
-			lineRenderer3.enabled = false;
-			rayActive = false;
-			secondRayActive = false;
-
+			if (rayActive)
+			{
+				cancelFrostRay();
+			}
 			animator.SetBool("Attack", false);
 			animator.SetFloat("AttackSpeed", 1.0f);
-			audioManager.Stop("ColdCast");
-			frostSoundIsPlaying = false;
 		}
+	}
+	void cancelFrostRay()
+	{
+		Destroy(frostImpactInstance);
+		Destroy(frostImpactInstance2);
+		Destroy(frostImpactInstance3);
+		Destroy(frostStartInstance);
+		lineRenderer.enabled = false;
+		lineRenderer2.enabled = false;
+		lineRenderer3.enabled = false;
+		rayActive = false;
+		secondRayActive = false;
+
+		animator.SetBool("Attack", false);
+		animator.SetFloat("AttackSpeed", 1.0f);
+		audioManager.Stop("ColdCast");
+		frostSoundIsPlaying = false;
 	}
 
 	// now calls from animator
@@ -355,6 +364,11 @@ public class Player : MonoBehaviour
 			{
 				case 0: // if now cold chosen
 				// select toxic
+					if (rayActive)
+					{
+						cancelFrostRay();
+					}
+
 					weaponType = WeaponGreenPrefab;
 					projectilesAmount = projectiles[1];
 					attackSpeed = attackSpeedToxic;
@@ -411,6 +425,11 @@ public class Player : MonoBehaviour
 			{
 				case 0: // if now cold chosen
 				// select lightning
+					if (rayActive)
+					{
+						cancelFrostRay();
+					}
+
 					weaponType = WeaponYellowPrefab;
 					projectilesAmount = projectiles[4];
 					attackSpeed = attackSpeedLightning;
@@ -487,6 +506,10 @@ public class Player : MonoBehaviour
 				selectWeapon(1);
 				animator.SetInteger("weaponType", 1);
 				weaponSelected = 1;
+				if (rayActive)
+				{
+					cancelFrostRay();
+				}
 			}
 		}
 		else if (Input.GetKey(KeyCode.Alpha3))
@@ -500,6 +523,11 @@ public class Player : MonoBehaviour
 				selectWeapon(2);
 				animator.SetInteger("weaponType", 2);
 				weaponSelected = 2;
+
+				if (rayActive)
+				{
+					cancelFrostRay();
+				}
 			}
 		}
 		else if (Input.GetKey(KeyCode.Alpha4))
@@ -526,6 +554,10 @@ public class Player : MonoBehaviour
 				selectWeapon(4);
 				animator.SetInteger("weaponType", 4);
 				weaponSelected = 4;
+				if (rayActive)
+				{
+					cancelFrostRay();
+				}
 			}
 		}
 	}
