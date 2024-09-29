@@ -541,6 +541,10 @@ public class Player : MonoBehaviour
 				selectWeapon(3);
 				animator.SetInteger("weaponType", 3);
 				weaponSelected = 3;
+				if (rayActive)
+				{
+					cancelFrostRay();
+				}
 			}
 		}
 		else if (Input.GetKey(KeyCode.Alpha5))
@@ -631,7 +635,6 @@ public class Player : MonoBehaviour
 					shieldAmount -= damage;
 					if (shieldAmount == 0)
 					{
-						// shield false
 						shield.SetActive(false);
 					}
 					return;
@@ -640,7 +643,6 @@ public class Player : MonoBehaviour
 				{
 					damage -= shieldAmount;
 					shieldAmount = 0;
-					// shield false
 					shield.SetActive(false);
 				}
 			}
@@ -655,12 +657,7 @@ public class Player : MonoBehaviour
 
 			if (currentHealth <= 0)
 			{
-				Time.timeScale = 0f;
-				audioManager.Stop("SagaOfTheSeaWolves");
-				CanvasUI.GetComponent<LootProgress>().PlayerDeath();
-				CanvasUI.GetComponent<PauseMenu>().gameOver = true;
-				// todo: game over sound?
-				// save player data
+				Death();
 			}
 			StartCoroutine(invulnerabilityCoroutine());
 			if (!isFrozen)
@@ -677,12 +674,16 @@ public class Player : MonoBehaviour
 
 		if (currentHealth <= 0)
 		{
-			Time.timeScale = 0f;
-			audioManager.Stop("SagaOfTheSeaWolves");
-			CanvasUI.GetComponent<LootProgress>().PlayerDeath();
-			CanvasUI.GetComponent<PauseMenu>().gameOver = true;
-			// todo: game over sound?
+			Death();
 		}
+	}
+
+	void Death()
+	{
+		Time.timeScale = 0f;
+		audioManager.Stop("SagaOfTheSeaWolves");
+		CanvasUI.GetComponent<LootProgress>().PlayerDeath();
+		CanvasUI.GetComponent<PauseMenu>().gameOver = true;
 	}
 
 	public IEnumerator invulnerabilityCoroutine()
@@ -739,7 +740,7 @@ public class Player : MonoBehaviour
 	// Freeze
 	public void Freeze()
 	{
-		if (isFrozen == true || shieldAmount > 0)                                      // if coroutine
+		if (isFrozen == true || shieldAmount > 0)      // if coroutine
 		{
 			return;
 		}
