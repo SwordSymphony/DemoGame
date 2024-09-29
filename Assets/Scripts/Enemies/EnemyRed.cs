@@ -19,6 +19,7 @@ public class EnemyRed : MonoBehaviour
 	public Animator freezeAnimator;
 	public Animator fearAnimator;
 	public Animator slowAnimator;
+	public Animator overloadAnimator;
 
 	public LayerMask PlayerLayer;
 	public LayerMask RedEnemyLayer;
@@ -55,6 +56,7 @@ public class EnemyRed : MonoBehaviour
 	bool ShootCooldown;
 	bool isBiting;
 	bool isFireBreathing;
+	public bool isOverload;
 
 	void Start ()
 	{
@@ -158,15 +160,15 @@ public class EnemyRed : MonoBehaviour
 		var angle = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
 		// animator.SetBool("Attack", true);
 
-		transform.GetChild(5).gameObject.SetActive(true);
-		transform.GetChild(5).transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+		transform.GetChild(6).gameObject.SetActive(true);
+		transform.GetChild(6).transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
 		yield return new WaitForSeconds(2.0f);
 
 		isFireBreathing = false;
 		ShootCooldown = true;
 		// animator.SetBool("RamAttack", false);
-		transform.GetChild(5).gameObject.SetActive(false);
+		transform.GetChild(6).gameObject.SetActive(false);
 		yield return new WaitForSeconds(shootCooldownDuration);
 
 		ShootCooldown = false;
@@ -180,15 +182,15 @@ public class EnemyRed : MonoBehaviour
 		var angle = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
 		// animator.SetBool("Attack", true);
 
-		transform.GetChild(4).gameObject.SetActive(true);
-		transform.GetChild(4).transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+		transform.GetChild(5).gameObject.SetActive(true);
+		transform.GetChild(5).transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
 		yield return new WaitForSeconds(0.3f);
 
 		isBiting = false;
 		attackCooldown = true;
 		// animator.SetBool("RamAttack", false);
-		transform.GetChild(4).gameObject.SetActive(false);
+		transform.GetChild(5).gameObject.SetActive(false);
 		yield return new WaitForSeconds(attackCooldownDuration);
 
 		attackCooldown = false;
@@ -206,7 +208,7 @@ public class EnemyRed : MonoBehaviour
 	{
 		if (target.gameObject == player && isFireBreathing)
 		{
-			target.gameObject.GetComponent<Player>().TakeDamage(1, transform.position, 0, false);
+			target.gameObject.GetComponent<Player>().TakeDamage(4, transform.position, 0, false);
 			target.gameObject.GetComponent<Player>().Burn();
 		}
 	}
@@ -291,12 +293,21 @@ public class EnemyRed : MonoBehaviour
 		audioManager.PlayOneShot("EffectBurning");
 		isBurning = true;
 		burnAnimator.SetBool("Burn", true);
-		InvokeRepeating("TakeBurnDamage", 0.0f, 0.2f);
+		InvokeRepeating("TakeBurnDamage", 0.2f, 0.2f);
 		yield return new WaitForSeconds(seconds);
 		CancelInvoke("TakeBurnDamage");
 		isBurning = false;
 		burnAnimator.SetBool("Burn", false);
 		// audioManager.Stop("EffectBurning");
+	}
+	// overload
+	public IEnumerator OverloadCoroutine(int seconds)
+	{
+		isOverload = true;
+		overloadAnimator.SetBool("overload", true);
+		yield return new WaitForSeconds(seconds);
+		isOverload = false;
+		overloadAnimator.SetBool("overload", false);
 	}
 
 	// Knockback
@@ -321,6 +332,10 @@ public class EnemyRed : MonoBehaviour
 		{
 			posX = player.transform.position.x * multiplier;
 		}
+		else if (player.transform.position.x == transform.position.x)
+		{
+			posX = 0;
+		}
 
 		if (player.transform.position.y >= transform.position.y)
 		{
@@ -329,6 +344,10 @@ public class EnemyRed : MonoBehaviour
 		else if (player.transform.position.y <= transform.position.y)
 		{
 			posY = player.transform.position.y * multiplier;
+		}
+		else if (player.transform.position.y == transform.position.y)
+		{
+			posY = 0;
 		}
 		Vector2 movementDirection = new Vector2(posX, posY);
 		return movementDirection;

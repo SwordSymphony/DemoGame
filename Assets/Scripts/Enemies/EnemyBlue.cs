@@ -20,6 +20,7 @@ public class EnemyBlue : MonoBehaviour
 	public Animator freezeAnimator;
 	public Animator fearAnimator;
 	public Animator slowAnimator;
+	public Animator overloadAnimator;
 
 	public LayerMask PlayerLayer;
 	public LayerMask BlueEnemyLayer;
@@ -51,6 +52,7 @@ public class EnemyBlue : MonoBehaviour
 	bool isBurning;
 	bool isHpBarActive;
 	bool shootCooldown;
+	public bool isOverload;
 
 	void Start ()
 	{
@@ -238,12 +240,21 @@ public class EnemyBlue : MonoBehaviour
 		audioManager.Play("EffectBurning", false);
 		isBurning = true;
 		burnAnimator.SetBool("Burn", true);
-		InvokeRepeating("TakeBurnDamage", 0.0f, 0.2f);
+		InvokeRepeating("TakeBurnDamage", 0.2f, 0.2f);
 		yield return new WaitForSeconds(seconds);
 		CancelInvoke("TakeBurnDamage");
 		isBurning = false;
 		burnAnimator.SetBool("Burn", false);
 		// audioManager.Stop("EffectBurning");
+	}
+	// overload
+	public IEnumerator OverloadCoroutine(int seconds)
+	{
+		isOverload = true;
+		overloadAnimator.SetBool("overload", true);
+		yield return new WaitForSeconds(seconds);
+		isOverload = false;
+		overloadAnimator.SetBool("overload", false);
 	}
 
 	// Knockback
@@ -268,6 +279,10 @@ public class EnemyBlue : MonoBehaviour
 		{
 			posX = player.transform.position.x * multiplier;
 		}
+		else if (player.transform.position.x == transform.position.x)
+		{
+			posX = 0;
+		}
 
 		if (player.transform.position.y >= transform.position.y)
 		{
@@ -276,6 +291,10 @@ public class EnemyBlue : MonoBehaviour
 		else if (player.transform.position.y <= transform.position.y)
 		{
 			posY = player.transform.position.y * multiplier;
+		}
+		else if (player.transform.position.y == transform.position.y)
+		{
+			posY = 0;
 		}
 		Vector2 movementDirection = new Vector2(posX, posY);
 		return movementDirection;

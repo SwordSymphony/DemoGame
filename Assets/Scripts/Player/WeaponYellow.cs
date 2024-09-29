@@ -19,6 +19,7 @@ public class WeaponYellow : MonoBehaviour
 	bool exploded;
 	float penetrationCount;
 	float penetrationCountMax;
+	float overloadDuration;
 
 	void Start()
 	{
@@ -32,6 +33,7 @@ public class WeaponYellow : MonoBehaviour
 		projectileDamage = player.GetComponent<Player>().damageToxic;
 
 		force = 15;
+		overloadDuration = 4.0f;
 		// contactFilter = ~PlayerLayer;
 		penetrationCountMax = 3;
 
@@ -42,23 +44,44 @@ public class WeaponYellow : MonoBehaviour
 	{
 		if (penetrationCount < penetrationCountMax) // penetrate
 		{
+			float random = Random.Range(1, 100);
 			switch (target.gameObject.tag)
 				{
 					case "BlueEnemy":
 						target.gameObject.GetComponent<EnemyBlue>().StartCoroutine("KnockbackCoroutine", force);
+						if (random <= 10)
+						{
+							target.gameObject.GetComponent<EnemyBlue>().StartCoroutine("OverloadCoroutine", overloadDuration);
+						}
 						break;
 					case "GreenEnemy":
 						target.gameObject.GetComponent<EnemyGreen>().StartCoroutine("KnockbackCoroutine", force);
+						if (random <= 10)
+						{
+							target.gameObject.GetComponent<EnemyGreen>().StartCoroutine("OverloadCoroutine", overloadDuration);
+						}
 						break;
 					case "PurpleEnemy":
 						target.gameObject.GetComponent<EnemyPurple>().StartCoroutine("KnockbackCoroutine", force);
+						if (random <= 10)
+						{
+							target.gameObject.GetComponent<EnemyPurple>().StartCoroutine("OverloadCoroutine", overloadDuration);
+						}
 						break;
 					case "RedEnemy":
 						target.gameObject.GetComponent<EnemyRed>().StartCoroutine("KnockbackCoroutine", force);
+						if (random <= 10)
+						{
+							target.gameObject.GetComponent<EnemyRed>().StartCoroutine("OverloadCoroutine", overloadDuration);
+						}
 						break;
 					case "YellowEnemy":
 						target.gameObject.GetComponent<EnemyYellow>().TakeDamage(projectileDamage);
 						target.gameObject.GetComponent<EnemyYellow>().StartCoroutine("KnockbackCoroutine", force);
+						if (random <= 10)
+						{
+							target.gameObject.GetComponent<EnemyYellow>().StartCoroutine("OverloadCoroutine", overloadDuration);
+						}
 						break;
 					case "Obstacle":
 						penetrationCount = penetrationCountMax;
@@ -74,23 +97,44 @@ public class WeaponYellow : MonoBehaviour
 			{
 				for (int i = 0; i < num; i++)
 				{
+					float random = Random.Range(1, 100);
 					switch (results[i].gameObject.tag)
 					{
 						case "BlueEnemy":
 							results[i].gameObject.GetComponent<EnemyBlue>().StartCoroutine("KnockbackCoroutine", force);
+							if (random <= 10)
+							{
+								results[i].gameObject.GetComponent<EnemyBlue>().StartCoroutine("OverloadCoroutine", overloadDuration);
+							}
 							break;
 						case "GreenEnemy":
 							results[i].gameObject.GetComponent<EnemyGreen>().StartCoroutine("KnockbackCoroutine", force);
+							if (random <= 10)
+							{
+								results[i].gameObject.GetComponent<EnemyGreen>().StartCoroutine("OverloadCoroutine", overloadDuration);
+							}
 							break;
 						case "PurpleEnemy":
 							results[i].gameObject.GetComponent<EnemyPurple>().StartCoroutine("KnockbackCoroutine", force);
+							if (random <= 10)
+							{
+								results[i].gameObject.GetComponent<EnemyPurple>().StartCoroutine("OverloadCoroutine", overloadDuration);
+							}
 							break;
 						case "RedEnemy":
 							results[i].gameObject.GetComponent<EnemyRed>().StartCoroutine("KnockbackCoroutine", force);
+							if (random <= 10)
+							{
+								results[i].gameObject.GetComponent<EnemyRed>().StartCoroutine("OverloadCoroutine", overloadDuration);
+							}
 							break;
 						case "YellowEnemy":
 							results[i].gameObject.GetComponent<EnemyYellow>().TakeDamage(projectileDamage);
 							results[i].gameObject.GetComponent<EnemyYellow>().StartCoroutine("KnockbackCoroutine", force);
+							if (random <= 10)
+							{
+								results[i].gameObject.GetComponent<EnemyYellow>().StartCoroutine("OverloadCoroutine", overloadDuration);
+							}
 							break;
 					}
 				}

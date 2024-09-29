@@ -19,6 +19,7 @@ public class EnemyYellow : MonoBehaviour
 	public Animator freezeAnimator;
 	public Animator fearAnimator;
 	public Animator slowAnimator;
+	public Animator overloadAnimator;
 
 	public LayerMask PlayerLayer;
 	public LayerMask YellowEnemyLayer;
@@ -57,6 +58,7 @@ public class EnemyYellow : MonoBehaviour
 	bool isHpBarActive;
 	bool attackCooldown;
 	bool ramAttack;
+	public bool isOverload;
 
 	void Start ()
 	{
@@ -153,7 +155,7 @@ public class EnemyYellow : MonoBehaviour
 	public IEnumerator RamAttack()
 	{
 		animator.SetBool("RamAttack", true);
-		transform.GetChild(4).gameObject.SetActive(true);
+		transform.GetChild(5).gameObject.SetActive(true);
 		ramAttack = true;
 		Vector2 direction = player.transform.position - transform.position;
 		rb.AddForce(direction * ramForce, ForceMode2D.Impulse);
@@ -163,7 +165,7 @@ public class EnemyYellow : MonoBehaviour
 		rb.velocity = Vector3.zero;
 		attackCooldown = true;
 		animator.SetBool("RamAttack", false);
-		transform.GetChild(4).gameObject.SetActive(false);
+		transform.GetChild(5).gameObject.SetActive(false);
 		yield return new WaitForSeconds(attackCooldownDuration);
 
 		attackCooldown = false;
@@ -268,12 +270,21 @@ public class EnemyYellow : MonoBehaviour
 		audioManager.PlayOneShot("EffectBurning");
 		isBurning = true;
 		burnAnimator.SetBool("Burn", true);
-		InvokeRepeating("TakeBurnDamage", 0.0f, 0.2f);
+		InvokeRepeating("TakeBurnDamage", 0.2f, 0.2f);
 		yield return new WaitForSeconds(seconds);
 		CancelInvoke("TakeBurnDamage");
 		isBurning = false;
 		burnAnimator.SetBool("Burn", false);
 		// audioManager.Stop("EffectBurning");
+	}
+	// overload
+	public IEnumerator OverloadCoroutine(int seconds)
+	{
+		isOverload = true;
+		overloadAnimator.SetBool("overload", true);
+		yield return new WaitForSeconds(seconds);
+		isOverload = false;
+		overloadAnimator.SetBool("overload", false);
 	}
 
 	// Knockback
@@ -290,22 +301,30 @@ public class EnemyYellow : MonoBehaviour
 		float posX = transform.position.x;
 		float posY = transform.position.y;
 
-		if (player.transform.position.x >= transform.position.x)
+		if (player.transform.position.x > transform.position.x)
 		{
 			posX = player.transform.position.x * - multiplier;
 		}
-		else if (player.transform.position.x <= transform.position.x)
+		else if (player.transform.position.x < transform.position.x)
 		{
 			posX = player.transform.position.x * multiplier;
 		}
+		else if (player.transform.position.x == transform.position.x)
+		{
+			posX = 0;
+		}
 
-		if (player.transform.position.y >= transform.position.y)
+		if (player.transform.position.y > transform.position.y)
 		{
 			posY = player.transform.position.y * - multiplier;
 		}
-		else if (player.transform.position.y <= transform.position.y)
+		else if (player.transform.position.y < transform.position.y)
 		{
 			posY = player.transform.position.y * multiplier;
+		}
+		else if (player.transform.position.y == transform.position.y)
+		{
+			posY = 0;
 		}
 		Vector2 movementDirection = new Vector2(posX, posY);
 		return movementDirection;

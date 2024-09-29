@@ -574,11 +574,11 @@ public class Player : MonoBehaviour
 		if (shieldAmount > 0)
 		{
 			StopCoroutine(ShieldCoroutine());
+
 		}
 		shieldAmount += amount;
 		StartCoroutine(ShieldCoroutine());
 		shield.SetActive(true);
-		// animator shield true
 	}
 
 	public IEnumerator ShieldCoroutine()
@@ -586,7 +586,6 @@ public class Player : MonoBehaviour
 		yield return new WaitForSeconds(shieldTimer);
 		shieldAmount = 0;
 		shield.SetActive(false);
-		// animator shield false
 	}
 
 	public void TakeDamage(int damage, Vector2 hitDirection, int knockbackForce, bool ignoreInvulnerability)

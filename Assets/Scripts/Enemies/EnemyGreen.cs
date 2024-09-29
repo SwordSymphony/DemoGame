@@ -20,6 +20,7 @@ public class EnemyGreen : MonoBehaviour
 	public Animator freezeAnimator;
 	public Animator fearAnimator;
 	public Animator slowAnimator;
+	public Animator overloadAnimator;
 
 	public LayerMask PlayerLayer;
 	public LayerMask GreenEnemyLayer;
@@ -61,6 +62,7 @@ public class EnemyGreen : MonoBehaviour
 	bool attackCooldown;
 	bool isAttacking;
 	bool throwCooldown;
+	public bool isOverload;
 
 	void Start ()
 	{
@@ -192,27 +194,27 @@ public class EnemyGreen : MonoBehaviour
 		var angle = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
 		// animator.SetBool("Attack", true);
 
-		transform.GetChild(4).gameObject.SetActive(true);
-		transform.GetChild(4).transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+		transform.GetChild(5).gameObject.SetActive(true);
+		transform.GetChild(5).transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 		// audioManager.PlayOneShot("MushroomAttack");
 		yield return new WaitForSeconds(0.05f);
 
-		transform.GetChild(4).gameObject.SetActive(false);
+		transform.GetChild(5).gameObject.SetActive(false);
 		yield return new WaitForSeconds(0.05f);
 
-		transform.GetChild(4).gameObject.SetActive(true);
+		transform.GetChild(5).gameObject.SetActive(true);
 		// audioManager.PlayOneShot("MushroomAttack");
 		yield return new WaitForSeconds(0.05f);
 
-		transform.GetChild(4).gameObject.SetActive(false);
+		transform.GetChild(5).gameObject.SetActive(false);
 		yield return new WaitForSeconds(0.05f);
 
-		transform.GetChild(4).gameObject.SetActive(true);
+		transform.GetChild(5).gameObject.SetActive(true);
 		
 		yield return new WaitForSeconds(0.05f);
 
 		// animator.SetBool("Attack", false);
-		transform.GetChild(4).gameObject.SetActive(false);
+		transform.GetChild(5).gameObject.SetActive(false);
 		attackCooldown = true;
 		isAttacking = false;
 
@@ -320,12 +322,21 @@ public class EnemyGreen : MonoBehaviour
 		audioManager.PlayOneShot("EffectBurning");
 		isBurning = true;
 		burnAnimator.SetBool("Burn", true);
-		InvokeRepeating("TakeBurnDamage", 0.0f, 0.2f);
+		InvokeRepeating("TakeBurnDamage", 0.2f, 0.2f);
 		yield return new WaitForSeconds(seconds);
 		CancelInvoke("TakeBurnDamage");
 		isBurning = false;
 		burnAnimator.SetBool("Burn", false);
 		// audioManager.Stop("EffectBurning");
+	}
+	// overload
+	public IEnumerator OverloadCoroutine(int seconds)
+	{
+		isOverload = true;
+		overloadAnimator.SetBool("overload", true);
+		yield return new WaitForSeconds(seconds);
+		isOverload = false;
+		overloadAnimator.SetBool("overload", false);
 	}
 
 	// Knockback
@@ -350,6 +361,10 @@ public class EnemyGreen : MonoBehaviour
 		{
 			posX = player.transform.position.x * multiplier;
 		}
+		else if (player.transform.position.x == transform.position.x)
+		{
+			posX = 0;
+		}
 
 		if (player.transform.position.y >= transform.position.y)
 		{
@@ -358,6 +373,10 @@ public class EnemyGreen : MonoBehaviour
 		else if (player.transform.position.y <= transform.position.y)
 		{
 			posY = player.transform.position.y * multiplier;
+		}
+		else if (player.transform.position.y == transform.position.y)
+		{
+			posY = 0;
 		}
 		Vector2 movementDirection = new Vector2(posX, posY);
 		return movementDirection;

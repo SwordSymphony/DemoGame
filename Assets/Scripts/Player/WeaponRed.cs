@@ -51,12 +51,24 @@ public class WeaponRed : MonoBehaviour
 					{
 						case "BlueEnemy":
 							results[i].gameObject.GetComponent<EnemyBlue>().Burn(burnDuration);
+							if (results[i].gameObject.GetComponent<EnemyBlue>().isOverload == true)
+							{
+								results[i].gameObject.GetComponent<EnemyBlue>().TakeDamage(projectileDamage);
+							}
 							break;
 						case "GreenEnemy":
 							results[i].gameObject.GetComponent<EnemyGreen>().Burn(burnDuration);
+							if (results[i].gameObject.GetComponent<EnemyGreen>().isOverload == true)
+							{
+								results[i].gameObject.GetComponent<EnemyGreen>().TakeDamage(projectileDamage);
+							}
 							break;
 						case "PurpleEnemy":
 							results[i].gameObject.GetComponent<EnemyPurple>().Burn(burnDuration);
+							if (results[i].gameObject.GetComponent<EnemyPurple>().isOverload == true)
+							{
+								results[i].gameObject.GetComponent<EnemyPurple>().TakeDamage(projectileDamage);
+							}
 							break;
 						case "RedEnemy":
 							results[i].gameObject.GetComponent<EnemyRed>().TakeDamage(projectileDamage);
@@ -64,6 +76,10 @@ public class WeaponRed : MonoBehaviour
 							break;
 						case "YellowEnemy":
 							results[i].gameObject.GetComponent<EnemyYellow>().Burn(burnDuration);
+							if (results[i].gameObject.GetComponent<EnemyYellow>().isOverload == true)
+							{
+								results[i].gameObject.GetComponent<EnemyYellow>().TakeDamage(projectileDamage);
+							}
 							break;
 					}
 				}

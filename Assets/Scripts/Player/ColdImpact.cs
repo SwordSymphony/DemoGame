@@ -45,15 +45,31 @@ public class ColdImpact : MonoBehaviour
 						break;
 					case "GreenEnemy":
 						results[i].gameObject.GetComponent<EnemyGreen>().Freeze(freezeDuration);
+						if (results[i].gameObject.GetComponent<EnemyGreen>().isOverload == true)
+						{
+							results[i].gameObject.GetComponent<EnemyGreen>().TakeDamage(rayDamage);
+						}
 						break;
 					case "PurpleEnemy":
 						results[i].gameObject.GetComponent<EnemyPurple>().Freeze(freezeDuration);
+						if (results[i].gameObject.GetComponent<EnemyPurple>().isOverload == true)
+						{
+							results[i].gameObject.GetComponent<EnemyPurple>().TakeDamage(rayDamage);
+						}
 						break;
 					case "RedEnemy":
 						results[i].gameObject.GetComponent<EnemyRed>().Freeze(freezeDuration);
+						if (results[i].gameObject.GetComponent<EnemyRed>().isOverload == true)
+						{
+							results[i].gameObject.GetComponent<EnemyRed>().TakeDamage(rayDamage);
+						}
 						break;
 					case "YellowEnemy":
 						results[i].gameObject.GetComponent<EnemyYellow>().Freeze(freezeDuration);
+						if (results[i].gameObject.GetComponent<EnemyYellow>().isOverload == true)
+						{
+							results[i].gameObject.GetComponent<EnemyYellow>().TakeDamage(rayDamage);
+						}
 						break;
 				}
 			}
