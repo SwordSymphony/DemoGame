@@ -15,6 +15,7 @@ TagManager:
   - UiWeaponSelector
   - UI
   - Audio
+  - Obstacle
   layers:
   - Default
   - TransparentFX
