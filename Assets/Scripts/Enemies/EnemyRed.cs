@@ -104,7 +104,7 @@ public class EnemyRed : MonoBehaviour
 					spriteRenderer.flipX = false;
 				}
 	
-				Vector2 movementDirection = GetOppositeVector(1000);
+				Vector2 movementDirection = GetOppositeVector(player.transform.position);
 				transform.position = Vector2.MoveTowards(transform.position, movementDirection, currentMoveSpeed * Time.deltaTime);
 			}
 			else
@@ -313,55 +313,64 @@ public class EnemyRed : MonoBehaviour
 	}
 
 	// Knockback
-	public IEnumerator KnockbackCoroutine(int force)
+	public void Knockback(int force, Vector3 impactPosition)
 	{
 		if (knockbackCounter < 3)
 		{
-			Vector2 direction = GetOppositeVector(1);
-			rb.AddForce(direction * force, ForceMode2D.Impulse);
 			knockbackCounter += 1;
+			StartCoroutine(KnockbackCoroutine(force, impactPosition));
 		}
-		else
-		{
-			yield break;
-		}
+	}
+
+	IEnumerator KnockbackCoroutine(int force, Vector3 impactPosition)
+	{
+		Vector2 direction = GetOppositeVector(impactPosition);
+		rb.AddForce(direction * force, ForceMode2D.Impulse);
 		
 		yield return new WaitForSeconds(0.1f);
 		rb.velocity = Vector3.zero;
 		knockbackCounter--;
 	}
 
-	public Vector2 GetOppositeVector(int multiplier)
+	// public Vector2 GetOppositeVector(int multiplier)
+	// {
+	// 	float posX = transform.position.x;
+	// 	float posY = transform.position.y;
+
+	// 	if (player.transform.position.x >= transform.position.x)
+	// 	{
+	// 		posX = player.transform.position.x * - multiplier;
+	// 	}
+	// 	else if (player.transform.position.x <= transform.position.x)
+	// 	{
+	// 		posX = player.transform.position.x * multiplier;
+	// 	}
+	// 	else if (player.transform.position.x == transform.position.x)
+	// 	{
+	// 		posX = 0;
+	// 	}
+
+	// 	if (player.transform.position.y >= transform.position.y)
+	// 	{
+	// 		posY = player.transform.position.y * - multiplier;
+	// 	}
+	// 	else if (player.transform.position.y <= transform.position.y)
+	// 	{
+	// 		posY = player.transform.position.y * multiplier;
+	// 	}
+	// 	else if (player.transform.position.y == transform.position.y)
+	// 	{
+	// 		posY = 0;
+	// 	}
+	// 	Vector2 movementDirection = new Vector2(posX, posY);
+	// 	return movementDirection;
+	// }
+
+	public Vector2 GetOppositeVector(Vector3 impactPosition)
 	{
-		float posX = transform.position.x;
-		float posY = transform.position.y;
+		Vector3 direction = transform.position - impactPosition; // direction from impact point to enemy point
 
-		if (player.transform.position.x >= transform.position.x)
-		{
-			posX = player.transform.position.x * - multiplier;
-		}
-		else if (player.transform.position.x <= transform.position.x)
-		{
-			posX = player.transform.position.x * multiplier;
-		}
-		else if (player.transform.position.x == transform.position.x)
-		{
-			posX = 0;
-		}
-
-		if (player.transform.position.y >= transform.position.y)
-		{
-			posY = player.transform.position.y * - multiplier;
-		}
-		else if (player.transform.position.y <= transform.position.y)
-		{
-			posY = player.transform.position.y * multiplier;
-		}
-		else if (player.transform.position.y == transform.position.y)
-		{
-			posY = 0;
-		}
-		Vector2 movementDirection = new Vector2(posX, posY);
+		Vector2 movementDirection = direction.normalized*500;
 		return movementDirection;
 	}
 

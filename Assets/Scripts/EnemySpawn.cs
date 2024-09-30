@@ -64,8 +64,8 @@ public class EnemySpawn : MonoBehaviour
 		{
 			if (currentEnemies < maxEnemies)
 			{
-				InvokeRepeating("SpawnMobs", spawnStartDelay, spawnDelay);
 				isSpawning = true;
+				InvokeRepeating("SpawnMobs", spawnStartDelay, spawnDelay);
 			}
 		}
 	}
@@ -73,16 +73,16 @@ public class EnemySpawn : MonoBehaviour
 	public IEnumerator ChangeStage()
 	{
 		// stage 0
-		InvokeRepeating("SpawnMobs", spawnStartDelay, spawnDelay);
 		isSpawning = true;
+		InvokeRepeating("SpawnMobs", spawnStartDelay, spawnDelay);
 		yield return new WaitForSeconds(stageOneDuration);
 
 		// stage 1
 		StopSpawn();
 		spawnDelay /= 2;
 		spawnAmount = 5;
-		InvokeRepeating("SpawnMobs", spawnStartDelay, spawnDelay); // start new spawn
 		isSpawning = true;
+		InvokeRepeating("SpawnMobs", spawnStartDelay, spawnDelay); // start new spawn
 		yield return new WaitForSeconds(stageTwoDuration);
 
 		// stage 2
@@ -90,8 +90,8 @@ public class EnemySpawn : MonoBehaviour
 		spawnDelay /= 2;
 		spawnAmount = 7;
 		stage = 2;
-		InvokeRepeating("SpawnMobs", spawnStartDelay, spawnDelay); // start new spawn
 		isSpawning = true;
+		InvokeRepeating("SpawnMobs", spawnStartDelay, spawnDelay); // start new spawn
 		yield return new WaitForSeconds(stageThreeDuration);
 
 		// stage 3
@@ -99,8 +99,8 @@ public class EnemySpawn : MonoBehaviour
 		spawnDelay /= 2;
 		spawnAmount = 9;
 		stage = 3;
-		InvokeRepeating("SpawnMobs", spawnStartDelay, spawnDelay); // start new spawn
 		isSpawning = true;
+		InvokeRepeating("SpawnMobs", spawnStartDelay, spawnDelay); // start new spawn
 	}
 
 	public void EnemyDeathCounter()

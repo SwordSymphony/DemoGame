@@ -2039,7 +2039,7 @@ MonoBehaviour:
   ShootPoint4: {fileID: 7453676574609472281}
   ShootPoint5: {fileID: 4378548324651348267}
   WeaponsBarPrefab: {fileID: 0}
-  WeaponBluePrefab: {fileID: 7348653244791886122, guid: fdf72b06d54c7f5459ca5d71d5395636, type: 3}
+  WeaponBluePrefab: {fileID: 6594934058986649174, guid: a9ebfd3d6faabc24bbe080b29e0d3617, type: 3}
   WeaponGreenPrefab: {fileID: 7348653244791886122, guid: 26ad5b8495a3f2841b380da34c6227d9, type: 3}
   WeaponPurplePrefab: {fileID: 7348653244791886122, guid: 8131ee484ab25cb49aea962d54a510db, type: 3}
   WeaponRedPrefab: {fileID: 7348653244791886122, guid: c9fac034ba6ad0d4f954bca20aa0c5f4, type: 3}
@@ -2134,7 +2134,7 @@ MonoBehaviour:
   - {x: 6.0445075, y: -6.8937244, z: 0}
   m_ShapePathHash: 1159393270
   m_Mesh: {fileID: 0}
-  m_InstanceId: 203984
+  m_InstanceId: 269030
   m_LocalBounds:
     m_Center: {x: -0.18412971, y: 0.74767303, z: 0}
     m_Extent: {x: 6.8670654, y: 7.9292803, z: 0}

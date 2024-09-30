@@ -249,13 +249,12 @@ public class Player : MonoBehaviour
 		{
 			if (rayActive)
 			{
-				cancelFrostRay();
+				CancelFrostRay();
 			}
-			animator.SetBool("Attack", false);
-			animator.SetFloat("AttackSpeed", 1.0f);
+			CancelAttack();
 		}
 	}
-	void cancelFrostRay()
+	void CancelFrostRay()
 	{
 		Destroy(frostImpactInstance);
 		Destroy(frostImpactInstance2);
@@ -267,10 +266,13 @@ public class Player : MonoBehaviour
 		rayActive = false;
 		secondRayActive = false;
 
-		animator.SetBool("Attack", false);
-		animator.SetFloat("AttackSpeed", 1.0f);
 		audioManager.Stop("ColdCast");
 		frostSoundIsPlaying = false;
+	}
+	void CancelAttack()
+	{
+		animator.SetBool("Attack", false);
+		animator.SetFloat("AttackSpeed", 1.0f);
 	}
 
 	// now calls from animator
@@ -366,7 +368,8 @@ public class Player : MonoBehaviour
 				// select toxic
 					if (rayActive)
 					{
-						cancelFrostRay();
+						CancelFrostRay();
+						CancelAttack();
 					}
 
 					weaponType = WeaponGreenPrefab;
@@ -427,7 +430,8 @@ public class Player : MonoBehaviour
 				// select lightning
 					if (rayActive)
 					{
-						cancelFrostRay();
+						CancelFrostRay();
+						CancelAttack();
 					}
 
 					weaponType = WeaponYellowPrefab;
@@ -508,7 +512,8 @@ public class Player : MonoBehaviour
 				weaponSelected = 1;
 				if (rayActive)
 				{
-					cancelFrostRay();
+					CancelFrostRay();
+					CancelAttack();
 				}
 			}
 		}
@@ -526,7 +531,8 @@ public class Player : MonoBehaviour
 
 				if (rayActive)
 				{
-					cancelFrostRay();
+					CancelFrostRay();
+					CancelAttack();
 				}
 			}
 		}
@@ -543,7 +549,8 @@ public class Player : MonoBehaviour
 				weaponSelected = 3;
 				if (rayActive)
 				{
-					cancelFrostRay();
+					CancelFrostRay();
+					CancelAttack();
 				}
 			}
 		}
@@ -560,7 +567,8 @@ public class Player : MonoBehaviour
 				weaponSelected = 4;
 				if (rayActive)
 				{
-					cancelFrostRay();
+					CancelFrostRay();
+					CancelAttack();
 				}
 			}
 		}
@@ -750,7 +758,11 @@ public class Player : MonoBehaviour
 	public IEnumerator FreezeCoroutine(float seconds)
 	{
 		Color freezeColor = new Color(1, 1, 1, 0.7f);
-
+		if(rayActive)
+		{
+			CancelFrostRay();
+		}
+		CancelAttack();
 		isFrozen = true;
 		StopCoroutine(BlinkCoroutine());
 		spriteRenderer.color = freezeColor;

@@ -14,7 +14,7 @@ public class WeaponRed : MonoBehaviour
 	public int burnDamage;
 	public float aoeSize;
 	public float impactSize;
-	public float force;
+	public int force;
 	
 	ContactFilter2D contactFilter;
 	// public LayerMask PlayerLayer;
@@ -34,7 +34,7 @@ public class WeaponRed : MonoBehaviour
 
 		burnDuration = 4;
 		burnDamage= 4;
-		force = 5;
+		force = 6;
 		// contactFilter = ~PlayerLayer;
 		Destroy(gameObject, 1);
 	}
@@ -53,7 +53,7 @@ public class WeaponRed : MonoBehaviour
 					{
 						case "BlueEnemy":
 							results[i].gameObject.GetComponent<EnemyBlue>().Burn(burnDuration);
-							results[i].gameObject.GetComponent<EnemyBlue>().StartCoroutine("KnockbackCoroutine", force);
+							results[i].gameObject.GetComponent<EnemyBlue>().Knockback(force, transform.position);
 							if (results[i].gameObject.GetComponent<EnemyBlue>().isOverload == true)
 							{
 								results[i].gameObject.GetComponent<EnemyBlue>().TakeDamage(projectileDamage);
@@ -61,7 +61,7 @@ public class WeaponRed : MonoBehaviour
 							break;
 						case "GreenEnemy":
 							results[i].gameObject.GetComponent<EnemyGreen>().Burn(burnDuration);
-							results[i].gameObject.GetComponent<EnemyGreen>().StartCoroutine("KnockbackCoroutine", force);
+							results[i].gameObject.GetComponent<EnemyGreen>().Knockback(force, transform.position);
 							if (results[i].gameObject.GetComponent<EnemyGreen>().isOverload == true)
 							{
 								results[i].gameObject.GetComponent<EnemyGreen>().TakeDamage(projectileDamage);
@@ -69,7 +69,7 @@ public class WeaponRed : MonoBehaviour
 							break;
 						case "PurpleEnemy":
 							results[i].gameObject.GetComponent<EnemyPurple>().Burn(burnDuration);
-							results[i].gameObject.GetComponent<EnemyPurple>().StartCoroutine("KnockbackCoroutine", force);
+							results[i].gameObject.GetComponent<EnemyPurple>().Knockback(force, transform.position);
 							if (results[i].gameObject.GetComponent<EnemyPurple>().isOverload == true)
 							{
 								results[i].gameObject.GetComponent<EnemyPurple>().TakeDamage(projectileDamage);
@@ -78,11 +78,11 @@ public class WeaponRed : MonoBehaviour
 						case "RedEnemy":
 							results[i].gameObject.GetComponent<EnemyRed>().TakeDamage(projectileDamage);
 							results[i].gameObject.GetComponent<EnemyRed>().Burn(burnDuration);
-							results[i].gameObject.GetComponent<EnemyRed>().StartCoroutine("KnockbackCoroutine", force);
+							results[i].gameObject.GetComponent<EnemyRed>().Knockback(force, transform.position);
 							break;
 						case "YellowEnemy":
 							results[i].gameObject.GetComponent<EnemyYellow>().Burn(burnDuration);
-							results[i].gameObject.GetComponent<EnemyYellow>().StartCoroutine("KnockbackCoroutine", force);
+							results[i].gameObject.GetComponent<EnemyYellow>().Knockback(force, transform.position);
 							if (results[i].gameObject.GetComponent<EnemyYellow>().isOverload == true)
 							{
 								results[i].gameObject.GetComponent<EnemyYellow>().TakeDamage(projectileDamage);

@@ -18,7 +18,7 @@ public class WeaponPurple : MonoBehaviour
 
 	public float detectRadius;
 	public float speed;
-	public float force;
+	public int force;
 	bool targetFound;
 	Collider2D enemy;
 
@@ -93,7 +93,7 @@ public class WeaponPurple : MonoBehaviour
 					{
 						case "BlueEnemy":
 							results[i].gameObject.GetComponent<EnemyBlue>().Fear(fearDuration);
-							results[i].gameObject.GetComponent<EnemyBlue>().StartCoroutine("KnockbackCoroutine", force);
+							results[i].gameObject.GetComponent<EnemyBlue>().Knockback(force, transform.position);
 							if (results[i].gameObject.GetComponent<EnemyBlue>().isOverload == true)
 							{
 								results[i].gameObject.GetComponent<EnemyBlue>().TakeDamage(projectileDamage);
@@ -101,7 +101,7 @@ public class WeaponPurple : MonoBehaviour
 							break;
 						case "GreenEnemy":
 							results[i].gameObject.GetComponent<EnemyGreen>().Fear(fearDuration);
-							results[i].gameObject.GetComponent<EnemyGreen>().StartCoroutine("KnockbackCoroutine", force);
+							results[i].gameObject.GetComponent<EnemyGreen>().Knockback(force, transform.position);
 							if (results[i].gameObject.GetComponent<EnemyGreen>().isOverload == true)
 							{
 								results[i].gameObject.GetComponent<EnemyGreen>().TakeDamage(projectileDamage);
@@ -110,11 +110,11 @@ public class WeaponPurple : MonoBehaviour
 						case "PurpleEnemy":
 							results[i].gameObject.GetComponent<EnemyPurple>().TakeDamage(projectileDamage);
 							results[i].gameObject.GetComponent<EnemyPurple>().Fear(fearDuration);
-							results[i].gameObject.GetComponent<EnemyPurple>().StartCoroutine("KnockbackCoroutine", force);
+							results[i].gameObject.GetComponent<EnemyPurple>().Knockback(force, transform.position);
 							break;
 						case "RedEnemy":
 							results[i].gameObject.GetComponent<EnemyRed>().Fear(fearDuration);
-							results[i].gameObject.GetComponent<EnemyRed>().StartCoroutine("KnockbackCoroutine", force);
+							results[i].gameObject.GetComponent<EnemyRed>().Knockback(force, transform.position);
 							if (results[i].gameObject.GetComponent<EnemyRed>().isOverload == true)
 							{
 								results[i].gameObject.GetComponent<EnemyRed>().TakeDamage(projectileDamage);
@@ -122,7 +122,7 @@ public class WeaponPurple : MonoBehaviour
 							break;
 						case "YellowEnemy":
 							results[i].gameObject.GetComponent<EnemyYellow>().Fear(fearDuration);
-							results[i].gameObject.GetComponent<EnemyYellow>().StartCoroutine("KnockbackCoroutine", force);
+							results[i].gameObject.GetComponent<EnemyYellow>().Knockback(force, transform.position);
 							if (results[i].gameObject.GetComponent<EnemyYellow>().isOverload == true)
 							{
 								results[i].gameObject.GetComponent<EnemyYellow>().TakeDamage(projectileDamage);
