@@ -294,6 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5686c2b8f61757a458c64f456b3a8638, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DamageTextPrefab: {fileID: 7752385799140625366, guid: 2774b1698884c834f9cd9f22f4046b7e, type: 3}
   Exp_orbPrefab: {fileID: 4665254131019901452, guid: b2d18e32ad704b546a360ac6a68e4c40, type: 3}
   LootPrefab: {fileID: 4665254131019901452, guid: 52d38062a548e0f46a5eac957e3098ff, type: 3}
   RareLootPrefab: {fileID: 4665254131019901452, guid: ed013b295b1225048b237425872aa4af, type: 3}

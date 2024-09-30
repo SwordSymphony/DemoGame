@@ -280,40 +280,6 @@ public class EnemyBlue : MonoBehaviour
 		knockbackCounter--;
 	}
 
-	// public Vector2 GetOppositeVector(int multiplier)
-	// {
-	// 	float posX = transform.position.x;
-	// 	float posY = transform.position.y;
-
-	// 	if (player.transform.position.x >= transform.position.x)
-	// 	{
-	// 		posX = player.transform.position.x * - multiplier;
-	// 	}
-	// 	else if (player.transform.position.x <= transform.position.x)
-	// 	{
-	// 		posX = player.transform.position.x * multiplier;
-	// 	}
-	// 	else if (player.transform.position.x == transform.position.x)
-	// 	{
-	// 		posX = 0;
-	// 	}
-
-	// 	if (player.transform.position.y >= transform.position.y)
-	// 	{
-	// 		posY = player.transform.position.y * - multiplier;
-	// 	}
-	// 	else if (player.transform.position.y <= transform.position.y)
-	// 	{
-	// 		posY = player.transform.position.y * multiplier;
-	// 	}
-	// 	else if (player.transform.position.y == transform.position.y)
-	// 	{
-	// 		posY = 0;
-	// 	}
-	// 	Vector2 movementDirection = new Vector2(posX, posY);
-	// 	return movementDirection;
-	// }
-
 	public Vector2 GetOppositeVector(Vector3 impactPosition)
 	{
 		Vector3 direction = transform.position - impactPosition; // direction from impact point to enemy point
@@ -328,12 +294,11 @@ public class EnemyBlue : MonoBehaviour
 	}
 
 	// show damage UI
-	IEnumerator ShowDamage(int damage)
+	void ShowDamage(int damage)
 	{
 		GameObject damageText = Instantiate(DamageTextPrefab, transform.position + new Vector3(0, 4, 0), Quaternion.identity, transform);
 		damageText.GetComponent<TextMeshProUGUI>().text = damage.ToString();
-		yield return new WaitForSeconds(0.5f);
-		Destroy(damageText);
+		damageText.GetComponent<TextMeshProUGUI>().color = new Color(0, 0.58f, 1, 1);
 	}
 
 	public void TakeBurnDamage()
@@ -346,6 +311,7 @@ public class EnemyBlue : MonoBehaviour
 			healthbar = healthBarUI; // Health bar from enemy connects to health bar UI.
 			isHpBarActive = true;
 		}
+		ShowDamage(burnDamage);
 		currentHealth -= burnDamage;
 		healthbar.SetHealth(currentHealth);
 
@@ -365,7 +331,7 @@ public class EnemyBlue : MonoBehaviour
 			healthbar = healthBarUI; // Health bar from enemy connects to health bar UI.
 			isHpBarActive = true;
 		}
-		StartCoroutine(ShowDamage(damage));
+		ShowDamage(damage);
 		currentHealth -= damage;
 		healthbar.SetHealth(currentHealth);
 

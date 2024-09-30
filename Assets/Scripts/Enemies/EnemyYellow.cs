@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
+using TMPro;
 
 public class EnemyYellow : MonoBehaviour
 {
+	public GameObject DamageTextPrefab;
 	public GameObject Exp_orbPrefab;
 	public GameObject LootPrefab;
 	public GameObject RareLootPrefab;
@@ -308,40 +310,6 @@ public class EnemyYellow : MonoBehaviour
 		knockbackCounter--;
 	}
 
-	// public Vector2 GetOppositeVector(int multiplier)
-	// {
-	// 	float posX = transform.position.x;
-	// 	float posY = transform.position.y;
-
-	// 	if (player.transform.position.x > transform.position.x)
-	// 	{
-	// 		posX = player.transform.position.x * - multiplier;
-	// 	}
-	// 	else if (player.transform.position.x < transform.position.x)
-	// 	{
-	// 		posX = player.transform.position.x * multiplier;
-	// 	}
-	// 	else if (player.transform.position.x == transform.position.x)
-	// 	{
-	// 		posX = 0;
-	// 	}
-
-	// 	if (player.transform.position.y > transform.position.y)
-	// 	{
-	// 		posY = player.transform.position.y * - multiplier;
-	// 	}
-	// 	else if (player.transform.position.y < transform.position.y)
-	// 	{
-	// 		posY = player.transform.position.y * multiplier;
-	// 	}
-	// 	else if (player.transform.position.y == transform.position.y)
-	// 	{
-	// 		posY = 0;
-	// 	}
-	// 	Vector2 movementDirection = new Vector2(posX, posY);
-	// 	return movementDirection;
-	// }
-
 	public Vector2 GetOppositeVector(Vector3 impactPosition)
 	{
 		Vector3 direction = transform.position - impactPosition; // direction from impact point to enemy point
@@ -354,6 +322,14 @@ public class EnemyYellow : MonoBehaviour
 	{
 	}
 
+	// show damage UI
+	void ShowDamage(int damage)
+	{
+		GameObject damageText = Instantiate(DamageTextPrefab, transform.position + new Vector3(0, 4, 0), Quaternion.identity, transform);
+		damageText.GetComponent<TextMeshProUGUI>().text = damage.ToString();
+		damageText.GetComponent<TextMeshProUGUI>().color = new Color(1, 1, 0, 1);
+	}
+
 	public void TakeBurnDamage()
 	{
 		if (!isHpBarActive)
@@ -364,6 +340,7 @@ public class EnemyYellow : MonoBehaviour
 			healthbar = healthBarUI; // Health bar from enemy connects to health bar UI.
 			isHpBarActive = true;
 		}
+		ShowDamage(burnDamage);
 		currentHealth -= burnDamage;
 		healthbar.SetHealth(currentHealth);
 
@@ -383,6 +360,7 @@ public class EnemyYellow : MonoBehaviour
 			healthbar = healthBarUI; // Health bar from enemy connects to health bar UI.
 			isHpBarActive = true;
 		}
+		ShowDamage(damage);
 		currentHealth -= damage;
 		healthbar.SetHealth(currentHealth);
 
