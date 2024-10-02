@@ -346,7 +346,9 @@ public class Player : MonoBehaviour
 		int force = 3000;
 		rb.AddForce(movement * force, ForceMode2D.Impulse);
 		audioManager.PlayOneShot("Dash");
+		cam.GetComponent<CameraMovement>().CameraSpeed(100.0f);
 		yield return new WaitForSeconds(0.3f);
+		cam.GetComponent<CameraMovement>().CameraSpeed(30.0f);
 
 		rb.velocity = Vector3.zero;
 		isDashing = false;

@@ -29,16 +29,16 @@ public class LightningExplosion : MonoBehaviour
 				switch (results[i].gameObject.tag)
 				{
 					case "GreenEnemy":
-						results[i].gameObject.GetComponent<EnemyGreen>().StartCoroutine("KnockbackCoroutine", force);
+						results[i].gameObject.GetComponent<EnemyGreen>().Knockback(force, transform.position);
 						break;
 					case "RedEnemy":
-						results[i].gameObject.GetComponent<EnemyRed>().StartCoroutine("KnockbackCoroutine", force);
+						results[i].gameObject.GetComponent<EnemyRed>().Knockback(force, transform.position);
 						break;
 					case "PurpleEnemy":
-						results[i].gameObject.GetComponent<EnemyPurple>().StartCoroutine("KnockbackCoroutine", force);
+						results[i].gameObject.GetComponent<EnemyPurple>().Knockback(force, transform.position);
 						break;
 					case "BlueEnemy":
-						results[i].gameObject.GetComponent<EnemyBlue>().StartCoroutine("KnockbackCoroutine", force);
+						results[i].gameObject.GetComponent<EnemyBlue>().Knockback(force, transform.position);
 						break;
 				}
 			}

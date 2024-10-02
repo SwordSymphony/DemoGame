@@ -14,7 +14,7 @@ public class EnemySpawn : MonoBehaviour
 	GameObject enemyPrefab;
 
 	int maxEnemies;
-	int currentEnemies;
+	public int currentEnemies;
 	int enemyDeath;
 	float spawnDelay;
 	float spawnStartDelay;
@@ -26,7 +26,7 @@ public class EnemySpawn : MonoBehaviour
 	float stageThreeDuration;
 	int stage;
 
-	bool isSpawning;
+	public bool isSpawning;
 
 	List<Vector2> spawnPoints = new List<Vector2>()
 	{
