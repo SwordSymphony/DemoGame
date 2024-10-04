@@ -834,7 +834,7 @@ public class Player : MonoBehaviour
 
 		if (target)
 		{
-			impactPoint = target.transform.position; // impact point if ray collides
+			impactPoint = target.point; // impact point if ray collides
 		}
 		lineRenderer.SetPosition(0, ShootPoint1.transform.position); // line from start point
 		lineRenderer.SetPosition(1, impactPoint);                       // line to end point
@@ -880,11 +880,11 @@ public class Player : MonoBehaviour
 
 		if (target)
 		{
-			impactPoint = target.transform.position; // impact point if ray collides
+			impactPoint = target.point; // impact point if ray collides
 		}
 		if (target1)
 		{
-			impactPoint1 = target1.transform.position; // impact point if ray collides
+			impactPoint1 = target1.point; // impact point if ray collides
 		}
 		lineRenderer2.SetPosition(0, ShootPoint2.transform.position); // line from start point
 		lineRenderer2.SetPosition(1, impactPoint);                       // line to end point

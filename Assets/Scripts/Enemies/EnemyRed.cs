@@ -33,6 +33,7 @@ public class EnemyRed : MonoBehaviour
 	float shootCooldownDuration;
 	float baseMoveSpeed;
 	float currentMoveSpeed;
+	Vector2 fearMovementDirection;
 
 	// Health
 	public int maxHealth = 100;
@@ -97,7 +98,7 @@ public class EnemyRed : MonoBehaviour
 		{
 			if (isFeared)
 			{
-				if (transform.position.x > player.transform.position.x)
+				if (transform.position.x > fearMovementDirection.x)
 				{
 					spriteRenderer.flipX = true;
 				}
@@ -106,7 +107,7 @@ public class EnemyRed : MonoBehaviour
 					spriteRenderer.flipX = false;
 				}
 	
-				Vector2 movementDirection = GetOppositeVector(player.transform.position);
+				Vector2 movementDirection = GetFearVector(fearMovementDirection);
 				transform.position = Vector2.MoveTowards(transform.position, movementDirection, currentMoveSpeed * Time.deltaTime);
 			}
 			else
@@ -261,13 +262,14 @@ public class EnemyRed : MonoBehaviour
 	}
 
 	// Fear
-	public void Fear(int fearDuration)
+	public void Fear(int fearDuration, Vector2 impactPosition)
 	{
 		if (isFeared == true)                                      // if coroutine
 		{
 			StopCoroutine((FearCoroutine(fearDuration)));          // stop it
 		}
 		StartCoroutine(FearCoroutine(fearDuration));               // start new
+		fearMovementDirection = impactPosition;
 	}
 
 	public IEnumerator FearCoroutine(int seconds)
@@ -339,6 +341,13 @@ public class EnemyRed : MonoBehaviour
 		Vector3 direction = transform.position - impactPosition; // direction from impact point to enemy point
 
 		Vector2 movementDirection = direction.normalized*500;
+		return movementDirection;
+	}
+	public Vector2 GetFearVector(Vector3 impactPosition)
+	{
+		Vector3 direction = transform.position - impactPosition; // direction from impact point to enemy point
+
+		Vector2 movementDirection = direction *500;
 		return movementDirection;
 	}
 

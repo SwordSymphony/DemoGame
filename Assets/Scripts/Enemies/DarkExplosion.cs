@@ -31,16 +31,16 @@ public class DarkExplosion : MonoBehaviour
 				switch (results[i].gameObject.tag)
 				{
 					case "BlueEnemy":
-						results[i].gameObject.GetComponent<EnemyBlue>().Fear(fearDuration);
+						results[i].gameObject.GetComponent<EnemyBlue>().Fear(fearDuration, transform.position);
 						break;
 					case "GreenEnemy":
-						results[i].gameObject.GetComponent<EnemyGreen>().Fear(fearDuration);
+						results[i].gameObject.GetComponent<EnemyGreen>().Fear(fearDuration, transform.position);
 						break;
 					case "RedEnemy":
-						results[i].gameObject.GetComponent<EnemyRed>().Fear(fearDuration);
+						results[i].gameObject.GetComponent<EnemyRed>().Fear(fearDuration, transform.position);
 						break;
 					case "YellowEnemy":
-						results[i].gameObject.GetComponent<EnemyYellow>().Fear(fearDuration);
+						results[i].gameObject.GetComponent<EnemyYellow>().Fear(fearDuration, transform.position);
 						break;
 				}
 			}
@@ -53,19 +53,19 @@ public class DarkExplosion : MonoBehaviour
 		switch (target.gameObject.tag)
 		{
 			case "BlueEnemy":
-				target.gameObject.GetComponent<EnemyBlue>().Fear(fearDuration);
+				target.gameObject.GetComponent<EnemyBlue>().Fear(fearDuration, transform.position);
 				break;
 			case "GreenEnemy":
-				target.gameObject.GetComponent<EnemyGreen>().Fear(fearDuration);
+				target.gameObject.GetComponent<EnemyGreen>().Fear(fearDuration, transform.position);
 				break;
 			case "PurpleEnemy":
-				target.gameObject.GetComponent<EnemyPurple>().Fear(fearDuration);
+				target.gameObject.GetComponent<EnemyPurple>().Fear(fearDuration, transform.position);
 				break;
 			case "RedEnemy":
-				target.gameObject.GetComponent<EnemyRed>().Fear(fearDuration);
+				target.gameObject.GetComponent<EnemyRed>().Fear(fearDuration, transform.position);
 				break;
 			case "YellowEnemy":
-				target.gameObject.GetComponent<EnemyYellow>().Fear(fearDuration);
+				target.gameObject.GetComponent<EnemyYellow>().Fear(fearDuration, transform.position);
 				break;
 		}
 	}

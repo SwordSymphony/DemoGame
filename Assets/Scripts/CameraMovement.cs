@@ -32,12 +32,12 @@ public class CameraMovement : MonoBehaviour
 		Vector3 directionToMouse = new Vector3(mousePos.x - player.transform.position.x, mousePos.y - player.transform.position.y, -25); // from player to mouse direction
 		directionToMouse.Normalize();
 
-		if (distancePlayerToMouse > 25)
+		if (distancePlayerToMouse > 28)
 		{
 			Vector3 direction = new Vector3(player.transform.position.x + 12 * directionToMouse.x, player.transform.position.y + 12 * directionToMouse.y, -25);
 			transform.position = Vector3.MoveTowards(transform.position, direction, moveSpeed * Time.deltaTime);
 		}
-		else if (distancePlayerToMouse < 25)
+		else if (distancePlayerToMouse < 28)
 		{
 			// move camera to player
 			Vector3 direction = new Vector3(player.transform.position.x, player.transform.position.y, -25);

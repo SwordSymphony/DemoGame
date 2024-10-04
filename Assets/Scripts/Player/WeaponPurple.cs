@@ -92,7 +92,7 @@ public class WeaponPurple : MonoBehaviour
 					switch (results[i].gameObject.tag)
 					{
 						case "BlueEnemy":
-							results[i].gameObject.GetComponent<EnemyBlue>().Fear(fearDuration);
+							results[i].gameObject.GetComponent<EnemyBlue>().Fear(fearDuration, transform.position);
 							results[i].gameObject.GetComponent<EnemyBlue>().Knockback(force, transform.position);
 							if (results[i].gameObject.GetComponent<EnemyBlue>().isOverload == true)
 							{
@@ -100,7 +100,7 @@ public class WeaponPurple : MonoBehaviour
 							}
 							break;
 						case "GreenEnemy":
-							results[i].gameObject.GetComponent<EnemyGreen>().Fear(fearDuration);
+							results[i].gameObject.GetComponent<EnemyGreen>().Fear(fearDuration, transform.position);
 							results[i].gameObject.GetComponent<EnemyGreen>().Knockback(force, transform.position);
 							if (results[i].gameObject.GetComponent<EnemyGreen>().isOverload == true)
 							{
@@ -109,11 +109,11 @@ public class WeaponPurple : MonoBehaviour
 							break;
 						case "PurpleEnemy":
 							results[i].gameObject.GetComponent<EnemyPurple>().TakeDamage(projectileDamage);
-							results[i].gameObject.GetComponent<EnemyPurple>().Fear(fearDuration);
+							results[i].gameObject.GetComponent<EnemyPurple>().Fear(fearDuration, transform.position);
 							results[i].gameObject.GetComponent<EnemyPurple>().Knockback(force, transform.position);
 							break;
 						case "RedEnemy":
-							results[i].gameObject.GetComponent<EnemyRed>().Fear(fearDuration);
+							results[i].gameObject.GetComponent<EnemyRed>().Fear(fearDuration, transform.position);
 							results[i].gameObject.GetComponent<EnemyRed>().Knockback(force, transform.position);
 							if (results[i].gameObject.GetComponent<EnemyRed>().isOverload == true)
 							{
@@ -121,7 +121,7 @@ public class WeaponPurple : MonoBehaviour
 							}
 							break;
 						case "YellowEnemy":
-							results[i].gameObject.GetComponent<EnemyYellow>().Fear(fearDuration);
+							results[i].gameObject.GetComponent<EnemyYellow>().Fear(fearDuration, transform.position);
 							results[i].gameObject.GetComponent<EnemyYellow>().Knockback(force, transform.position);
 							if (results[i].gameObject.GetComponent<EnemyYellow>().isOverload == true)
 							{
