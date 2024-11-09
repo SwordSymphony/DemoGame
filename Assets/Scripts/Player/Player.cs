@@ -16,6 +16,12 @@ public class Player : MonoBehaviour
 	public Animator slowAnimator;
 	public GameObject heal;
 
+	private AnimatorStateInfo currentStateInfo;
+	private float currentAnimationTime;
+
+	private DirectionState currentDirectionState;
+	private bool movementDirectionChanged;
+
 	public static AudioManager audioManager;
 	private SpriteRenderer spriteRenderer;
 	
@@ -120,6 +126,10 @@ public class Player : MonoBehaviour
 	bool isBurning;
 	bool isFrozen;
 	bool spread;
+	bool isChangingWeapon;
+
+	private bool isShootingCooldown; // To track if the cooldown is active
+	private float shootingCooldownDuration; // Duration of the cooldown
 
 	void Start ()
 	{
@@ -153,8 +163,22 @@ public class Player : MonoBehaviour
 		attackSpeed = attackSpeedCold;
 		animator.SetInteger("weaponType", 0);
 
+		shootingCooldownDuration = 0.05f;
+
 		// load player data
 		LoadProgress();
+	}
+
+	private enum DirectionState
+	{
+		Right,
+		UpRight,
+		Up,
+		UpLeft,
+		Left,
+		DownLeft,
+		Down,
+		DownRight
 	}
 
 	void LoadProgress()
@@ -201,24 +225,17 @@ public class Player : MonoBehaviour
 		ChangeWeaponType();
 		ChangeWeaponTypeMouse();
 
-		movement.x = Input.GetAxisRaw("Horizontal"); // x input for movement
-		movement.y = Input.GetAxisRaw("Vertical");   // y input for movement
-
-		if (movement.sqrMagnitude > 0)
+		if (!isChangingWeapon && !isFrozen)
 		{
-			animator.SetBool("isMoving", true);
-		}
-		if (movement.sqrMagnitude <= 0)
-		{
-			animator.SetBool("isMoving", false);
+			Movement();
 		}
 
 		// mouse position
 		mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
 
+		// Dash skill
 		if (Input.GetKeyDown("space"))
 		{
-			// Dash
 			if(!isDashOnCooldown && !isFrozen)
 			{
 				if (movement.x != 0 || movement.y != 0)
@@ -228,8 +245,26 @@ public class Player : MonoBehaviour
 			}
 		}
 		
-		if (Input.GetButton("Fire1") && !isFrozen)
+		// attack/shoot
+		if (Input.GetButton("Fire1") && !isFrozen && !isChangingWeapon)
 		{
+			// if currently attacking
+			if (animator.GetBool("Attack") == true)
+			{
+				// Get current animation state info
+				currentStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+				currentAnimationTime = currentStateInfo.normalizedTime;
+				// Handle direction change for attack
+				if (movementDirectionChanged)
+				{
+					// Determine the new attack state based on the current aim direction
+					string newAttackState = DetermineAttackState();
+					// Play the new attack animation at the current animation time
+					animator.Play(newAttackState, 0, currentAnimationTime);
+					movementDirectionChanged = false;
+				}
+			}
+
 			animator.SetBool("Attack", true);
 			animator.SetFloat("AttackSpeed", attackSpeed);
 
@@ -245,6 +280,7 @@ public class Player : MonoBehaviour
 				ShootAdditionalRays();
 			}
 		}
+		// if stop attacking
 		else if (Input.GetButtonUp("Fire1"))
 		{
 			if (rayActive)
@@ -254,6 +290,107 @@ public class Player : MonoBehaviour
 			CancelAttack();
 		}
 	}
+
+	string DetermineAttackState()
+	{
+		// Calculate the current direction based on mouse position
+		DirectionState newDirectionState = CalculateDirection();
+
+		switch (newDirectionState)
+		{
+			case DirectionState.Right:
+				return "playerRightAttack";
+			case DirectionState.UpRight:
+				return "playerUpRightAttack";
+			case DirectionState.Up:
+				return "playerUpAttack";
+			case DirectionState.UpLeft:
+				return "playerUpLeftAttack";
+			case DirectionState.Left:
+				return "playerLeftAttack";
+			case DirectionState.DownLeft:
+				return "playerDownLeftAttack";
+			case DirectionState.Down:
+				return "playerDownAttack";
+			case DirectionState.DownRight:
+				return "playerDownRightAttack";
+			default: 
+				return "playerDownRightAttack";
+		}
+	}
+
+	void Movement()
+	{
+		movement.x = Input.GetAxisRaw("Horizontal"); // x input for movement
+		movement.y = Input.GetAxisRaw("Vertical");   // y input for movement
+
+		if (movement.sqrMagnitude > 0)
+		{
+			animator.SetBool("isMoving", true);
+		}
+		if (movement.sqrMagnitude <= 0)
+		{
+			animator.SetBool("isMoving", false);
+		}
+
+		// Calculate the current direction based on mouse position
+		DirectionState newDirectionState = CalculateDirection();
+
+		// Check if the direction has changed
+		if (newDirectionState != currentDirectionState)
+		{
+			movementDirectionChanged = true;
+			currentDirectionState = newDirectionState; // Update the current direction state
+		}
+
+		// Handle movement and set animator parameters
+		HandleMovement(newDirectionState);
+	}
+
+	// mouse direction
+	DirectionState CalculateDirection()
+	{
+		float angle = Mathf.Atan2(aim.y, aim.x) * Mathf.Rad2Deg;
+		if (angle < 0)
+		{
+			angle += 360;
+		}
+		// Determine the direction state based on the angle
+		if (angle >= 337.5 || angle < 22.5)        // right
+			return DirectionState.Right;
+		else if (angle >= 22.5 && angle < 67.5)    // upRight
+			return DirectionState.UpRight;
+		else if (angle >= 67.5 && angle < 112.5)   // up
+			return DirectionState.Up;
+		else if (angle >= 112.5 && angle < 157.5)  // upLeft
+			return DirectionState.UpLeft;
+		else if (angle >= 157.5 && angle < 202.5)  // left
+			return DirectionState.Left;
+		else if (angle >= 202.5 && angle < 247.5)  // downLeft
+			return DirectionState.DownLeft;
+		else if (angle >= 247.5 && angle < 292.5)  // down
+			return DirectionState.Down;
+		else if (angle >= 292.5 && angle < 337.5)  // downRight
+			return DirectionState.DownRight;
+		else
+			// Default return (in case no conditions are met)
+			return DirectionState.Right;
+	}
+
+	// animator mouse direction bools
+	void HandleMovement(DirectionState directionState)
+	{
+		// Set animator parameters based on the current direction state
+		animator.SetBool("right", directionState == DirectionState.Right);
+		animator.SetBool("upRight", directionState == DirectionState.UpRight);
+		animator.SetBool("up", directionState == DirectionState.Up);
+		animator.SetBool("upLeft", directionState == DirectionState.UpLeft);
+		animator.SetBool("left", directionState == DirectionState.Left);
+		animator.SetBool("downLeft", directionState == DirectionState.DownLeft);
+		animator.SetBool("down", directionState == DirectionState.Down);
+		animator.SetBool("downRight", directionState == DirectionState.DownRight);
+	}
+
 	void CancelFrostRay()
 	{
 		Destroy(frostImpactInstance);
@@ -278,7 +415,9 @@ public class Player : MonoBehaviour
 	// now calls from animator
 	void Shoot()
 	{
-		switch (projectilesAmount)
+		if (!isShootingCooldown)
+		{
+			switch (projectilesAmount)
 			{
 				case 1:
 					ShootOneProjectile();
@@ -297,6 +436,16 @@ public class Player : MonoBehaviour
 					ShootFiveProjectiles();
 					break;
 			}
+			StartCoroutine(ShootingCooldown());
+		}	
+
+	}
+
+	private IEnumerator ShootingCooldown()
+	{
+		isShootingCooldown = true; // Set the cooldown flag
+		yield return new WaitForSeconds(shootingCooldownDuration); // Wait for the		cooldown duration
+		isShootingCooldown = false; // Reset the cooldown flag
 	}
 
 	void FixedUpdate()
@@ -314,17 +463,8 @@ public class Player : MonoBehaviour
 		aim4 = ShootPoint4.transform.position - RotatePoint.transform.position;
 		aim5 = ShootPoint5.transform.position - RotatePoint.transform.position;
 
-		var angle = Mathf.Atan2(aim.y, aim.x) * Mathf.Rad2Deg;
-		RotatePoint.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-
-		if (aim.x > 0)
-		{
-			spriteRenderer.flipX = true;
-		}
-		else
-		{
-			spriteRenderer.flipX = false;
-		}
+		var rotateAngle = Mathf.Atan2(aim.y, aim.x) * Mathf.Rad2Deg;
+		RotatePoint.transform.rotation = Quaternion.AngleAxis(rotateAngle, Vector3.forward);
 	}
 
 	void CheckForLoot()
@@ -381,6 +521,7 @@ public class Player : MonoBehaviour
 					selectWeapon(1);
 					animator.SetInteger("weaponType", 1);
 					weaponSelected = 1;
+					WeaponChangeStart();
 					break;
 				case 1: // if now toxic
 				// select dark
@@ -391,6 +532,7 @@ public class Player : MonoBehaviour
 					selectWeapon(2);
 					animator.SetInteger("weaponType", 2);
 					weaponSelected = 2;
+					WeaponChangeStart();
 					break;
 				case 2: // if now dark
 				// select fire
@@ -401,6 +543,7 @@ public class Player : MonoBehaviour
 					selectWeapon(3);
 					animator.SetInteger("weaponType", 3);
 					weaponSelected = 3;
+					WeaponChangeStart();
 					break;
 				case 3: // if now fire
 				// select lightning
@@ -411,6 +554,7 @@ public class Player : MonoBehaviour
 					selectWeapon(4);
 					animator.SetInteger("weaponType", 4);
 					weaponSelected = 4;
+					WeaponChangeStart();
 					break;
 				case 4: // if now lightning
 				// select cold
@@ -420,6 +564,7 @@ public class Player : MonoBehaviour
 					attackSpeed = attackSpeedCold;
 					animator.SetInteger("weaponType", 0);
 					weaponSelected = 0;
+					WeaponChangeStart();
 					break;
 			}
 		}
@@ -443,6 +588,7 @@ public class Player : MonoBehaviour
 					selectWeapon(4);
 					animator.SetInteger("weaponType", 4);
 					weaponSelected = 4;
+					WeaponChangeStart();
 					break;
 				case 1: // if now toxic
 				// select cold
@@ -452,6 +598,7 @@ public class Player : MonoBehaviour
 					attackSpeed = attackSpeedCold;
 					animator.SetInteger("weaponType", 0);
 					weaponSelected = 0;
+					WeaponChangeStart();
 					break;
 				case 2: // if now dark
 				// select toxic
@@ -462,6 +609,7 @@ public class Player : MonoBehaviour
 					selectWeapon(1);
 					animator.SetInteger("weaponType", 1);
 					weaponSelected = 1;
+					WeaponChangeStart();
 					break;
 				case 3: // if now fire
 				// select dark
@@ -472,6 +620,7 @@ public class Player : MonoBehaviour
 					selectWeapon(2);
 					animator.SetInteger("weaponType", 2);
 					weaponSelected = 2;
+					WeaponChangeStart();
 					break;
 				case 4: // if now lightning
 				// select fire
@@ -482,6 +631,7 @@ public class Player : MonoBehaviour
 					selectWeapon(3);
 					animator.SetInteger("weaponType", 3);
 					weaponSelected = 3;
+					WeaponChangeStart();
 					break;
 			}
 		}
@@ -499,6 +649,7 @@ public class Player : MonoBehaviour
 				attackSpeed = attackSpeedCold;
 				animator.SetInteger("weaponType", 0);
 				weaponSelected = 0;
+				WeaponChangeStart();
 			}
 		}
 		else if (Input.GetKey(KeyCode.Alpha2))
@@ -517,6 +668,7 @@ public class Player : MonoBehaviour
 					CancelFrostRay();
 					CancelAttack();
 				}
+				WeaponChangeStart();
 			}
 		}
 		else if (Input.GetKey(KeyCode.Alpha3))
@@ -536,6 +688,7 @@ public class Player : MonoBehaviour
 					CancelFrostRay();
 					CancelAttack();
 				}
+				WeaponChangeStart();
 			}
 		}
 		else if (Input.GetKey(KeyCode.Alpha4))
@@ -554,6 +707,7 @@ public class Player : MonoBehaviour
 					CancelFrostRay();
 					CancelAttack();
 				}
+				WeaponChangeStart();
 			}
 		}
 		else if (Input.GetKey(KeyCode.Alpha5))
@@ -572,8 +726,27 @@ public class Player : MonoBehaviour
 					CancelFrostRay();
 					CancelAttack();
 				}
+				WeaponChangeStart();
 			}
 		}
+	}
+
+	void WeaponChangeStart()
+	{
+		animator.Play("ChangeWeaponType");
+		isChangingWeapon = true;
+		animator.SetBool("changeWeapon", true);
+		animator.SetBool("isMoving", false);
+		CancelAttack();
+		rb.velocity = Vector3.zero;
+		rb.constraints = RigidbodyConstraints2D.FreezeAll;
+	}
+
+	void WeaponChanged()
+	{
+		isChangingWeapon = false;
+		animator.SetBool("changeWeapon", false);
+		rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 	}
 
 	void selectWeapon(int selected)

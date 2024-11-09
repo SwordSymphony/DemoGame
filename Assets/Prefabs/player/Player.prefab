@@ -2101,7 +2101,9 @@ MonoBehaviour:
   Enemy_redPrefab: {fileID: 1881084584309150268, guid: 81b24658ca55973469d849f271a320ce, type: 3}
   Enemy_yellowPrefab: {fileID: 2902649648589867726, guid: 2ec413564c5aa3b498ee92635c3d816d, type: 3}
   Enemy_purplePrefab: {fileID: 1881084584309150268, guid: 068bfbb0735dda94b8d066a0ae897e30, type: 3}
+  currentEnemies: 0
   currentTime: 0
+  isSpawning: 0
 --- !u!114 &5665065008213004940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2134,7 +2136,7 @@ MonoBehaviour:
   - {x: 6.0445075, y: -6.8937244, z: 0}
   m_ShapePathHash: 1159393270
   m_Mesh: {fileID: 0}
-  m_InstanceId: 252970
+  m_InstanceId: 42124
   m_LocalBounds:
     m_Center: {x: -0.18412971, y: 0.74767303, z: 0}
     m_Extent: {x: 6.8670654, y: 7.9292803, z: 0}
@@ -2148,7 +2150,7 @@ Animator:
   m_GameObject: {fileID: 8377968344148975440}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 942e17bd2b94f44449f7fbd76a499dfa, type: 2}
+  m_Controller: {fileID: 9100000, guid: 1c4f3dea1fb88294e91f9e7e7d810a33, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
